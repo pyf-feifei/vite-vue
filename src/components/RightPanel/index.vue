@@ -1,6 +1,6 @@
 <template>
   <Teleport to="body">
-    <div class="right-panel">
+    <div class="right-panel" :style="{ width: show ? '300px' : '0px' }">
       <div
         class="right-panel-btn"
         :style="{
