@@ -13,9 +13,11 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 import '@/styles/dark.scss'
 
 import { setupDirective } from '@/directive'
+import { setupDialog } from '@/utils/dialog/index'
 
 import { createPinia } from 'pinia'
 const pinia = createPinia()
 const app = createApp(App)
-setupDirective(app)
+setupDirective(app) //使用自定义Directive
+setupDialog(app) //使用自定义dialog
 app.use(router).use(ElementPlus).use(pinia).mount('#app')
