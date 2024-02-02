@@ -25,4 +25,4 @@ const useUserStore = defineStore('user', {
     },
   },
 })
-export default useUserStore
+export default useUserStore()

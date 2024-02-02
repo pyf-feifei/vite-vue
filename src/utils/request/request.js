@@ -1,16 +1,24 @@
 import axios from 'axios'
-import useAppStore from '@/store/modules/user'
+import userStore from '@/store/modules/user'
 
 // 创建 axios 实例
 const service = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 50000,
   headers: { 'Content-Type': 'application/json;charset=utf-8' },
+  transformResponse: [
+    function (data) {
+      if (typeof data === 'string') {
+        return JSONbigString.parse(data)
+      } else {
+        return data
+      }
+    },
+  ],
 })
 // 请求拦截器
 service.interceptors.request.use(
   (config) => {
-    const userStore = useAppStore()
     if (userStore.token) {
       config.headers.Authorization = userStore.token
     }

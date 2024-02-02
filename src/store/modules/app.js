@@ -18,4 +18,4 @@ const useAppStore = defineStore('app', {
     },
   },
 })
-export default useAppStore
+export default useAppStore()

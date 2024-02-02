@@ -4,8 +4,7 @@
 </template>
 
 <script setup>
-import useAppStore from '@/store/modules/app'
-const appStore = useAppStore()
+import appStore from '@/store/modules/app'
 let count = appStore.count
 </script>
 

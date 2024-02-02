@@ -28,13 +28,11 @@
 </template>
 
 <script setup>
-import useUserStore from '@/store/modules/user'
-import useSettingsStore from '@/store/modules/settings'
+import userStore from '@/store/modules/user'
+import settingsStore from '@/store/modules/settings'
 import { Settings } from '@/Layout/components/index'
 import Editor from '@/components/WangEditor/index.vue'
 import RightPanel from '@/components/RightPanel/index.vue'
-const settingsStore = useSettingsStore()
-const userStore = useUserStore()
 let testMsg = ref('1111111')
 const open = () => {
   ElMessage('this is a message.')

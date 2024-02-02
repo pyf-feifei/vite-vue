@@ -9,4 +9,4 @@ const useSettingsStore = defineStore('setting', {
   getters: {},
   actions: {},
 })
-export default useSettingsStore
+export default useSettingsStore()

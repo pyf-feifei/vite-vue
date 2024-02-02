@@ -19,12 +19,11 @@
 <script setup>
 import IconEpSunny from '~icons/ep/sunny'
 import IconEpMoon from '~icons/ep/moon'
-import useSettingsStore from '@/store/modules/settings'
+import settingsStore from '@/store/modules/settings'
 
 /**
  * 暗黑模式
  */
-const settingsStore = useSettingsStore()
 const isDark = useDark()
 const toggleDark = () => useToggle(isDark)
 </script>
