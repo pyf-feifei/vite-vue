@@ -43,7 +43,9 @@ const open = () => {
 }
 const openDialog = () => {
   console.log('proxy', proxy.$dialog)
-  proxy.$dialog.show(TestDialogs)
+  proxy.$dialog.show(TestDialogs).then((res) => {
+    console.log('res', res)
+  })
 }
 const doLogIn = () => {
   userStore.login({ name: '', password: '' }).then(() => {})

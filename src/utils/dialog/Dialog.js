@@ -7,23 +7,40 @@ class Dialog {
   }
 
   show(component, props = {}) {
-    const dialogContainer = document.createElement('div')
-    document.body.appendChild(dialogContainer) // 将新弹窗挂载到 body
-    const dialogApp = createApp(DialogComponent, {
-      onClose: () => {
-        dialogApp.unmount(dialogContainer) // 关闭时卸载组件
-        document.body.removeChild(dialogContainer) // 移除容器
-      },
-      ...{
-        title: '标题',
-      },
-      ...props,
-    })
-    dialogApp.config.globalProperties.$dialog = this
-    const dialogInstance = dialogApp.mount(dialogContainer)
-    dialogInstance.show(component)
+    return new Promise((resolve, reject) => {
+      const dialogContainer = document.createElement('div')
+      document.body.appendChild(dialogContainer) // 将新弹窗挂载到 body
+      const dialogApp = createApp(DialogComponent, {
+        onClose: () => {
+          dialogApp.unmount(dialogContainer) // 关闭时卸载组件
+          document.body.removeChild(dialogContainer) // 移除容器
+        },
+        ...{
+          title: '标题',
+          width: '800px',
+        },
+        ...props,
+      })
+      dialogApp.config.globalProperties.$dialog = this
+      const dialogInstance = dialogApp.mount(dialogContainer)
+      //添加关闭弹窗方法
+      const mixin = {
+        methods: {
+          $dialogClose(isSucces = false, retrunData) {
+            dialogInstance.onClose()
+            resolve({
+              confirm: isSucces,
+              data: retrunData,
+            })
+          },
+        },
+      }
+      // 新建一个对象
+      const componentWithMixin = Object.assign({}, component, mixin)
+      dialogInstance.show(componentWithMixin)
 
-    this.dialogs.push(dialogInstance) // 存储弹窗实例以便管理
+      this.dialogs.push(dialogInstance) // 存储弹窗实例以便管理
+    })
   }
 
   hideAll() {

@@ -3,7 +3,12 @@
     <transition>
       <div v-if="visible" class="dialog fixed top-0 left-0 right-0 bottom-0">
         <!-- 动态组件渲染 -->
-        <div class="dialog-in">
+        <div
+          class="dialog-in"
+          :style="{
+            width: props.width,
+          }"
+        >
           <header class="dialog-in-title">
             <span>{{ props.title }}</span>
             <div
@@ -31,6 +36,10 @@ export default {
     title: {
       type: String,
       default: '标题',
+    },
+    width: {
+      type: String,
+      default: '800px',
     },
   },
   setup(props) {
