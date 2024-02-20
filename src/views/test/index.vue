@@ -20,6 +20,7 @@
     <el-button type="info" v-testDirective="true" @click="doLogIn"
       >登录</el-button
     >
+    <el-button type="primary" @click="openDialog">测试弹窗</el-button>
     <editor v-model="value" style="height: 600px" />
     <RightPanel v-if="showSettings">
       <settings />
@@ -33,9 +34,16 @@ import settingsStore from '@/store/modules/settings'
 import { Settings } from '@/Layout/components/index'
 import Editor from '@/components/WangEditor/index.vue'
 import RightPanel from '@/components/RightPanel/index.vue'
+import TestDialogs from './dialogs/TestDialogs.vue'
+import TestDialogs1 from './dialogs/TestDialogs1.vue'
+const { proxy } = getCurrentInstance()
 let testMsg = ref('1111111')
 const open = () => {
   ElMessage('this is a message.')
+}
+const openDialog = () => {
+  console.log('proxy', proxy.$dialog)
+  proxy.$dialog.show(TestDialogs)
 }
 const doLogIn = () => {
   userStore.login({ name: '', password: '' }).then(() => {})

@@ -13,7 +13,7 @@ import 'element-plus/theme-chalk/dark/css-vars.css'
 import '@/styles/dark.scss'
 
 import { setupDirective } from '@/directive'
-import { setupDialog } from '@/utils/dialog/index'
+import { setupDialog } from '@/utils/dialog/Dialog'
 
 import { createPinia } from 'pinia'
 const pinia = createPinia()
