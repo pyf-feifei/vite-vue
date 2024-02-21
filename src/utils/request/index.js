@@ -1,5 +1,7 @@
 import { ElLoading, ElMessage } from 'element-plus'
+import merge from 'lodash/merge'
 import request from './request'
+import { globalConfig } from '@/config/globalConfig'
 /**
  * 遮罩管理，多次调用支持引用计数
  */

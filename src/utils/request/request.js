@@ -1,5 +1,8 @@
 import axios from 'axios'
+import dialog from '@/utils/dialog/Dialog'
 import userStore from '@/store/modules/user'
+import JSONbig from 'json-bigint'
+const JSONbigString = new JSONbig({ storeAsString: true })
 
 // 创建 axios 实例
 const service = axios.create({
@@ -32,32 +35,30 @@ service.interceptors.request.use(
 // 响应拦截器
 service.interceptors.response.use(
   (response) => {
-    const { code, msg } = response.data
-    // 登录成功
-    if (code === '00000') {
-      return response.data
-    }
-
-    ElMessage.error(msg || '系统出错')
-    return Promise.reject(new Error(msg || 'Error'))
-  },
-  (error) => {
-    if (error.response.data) {
-      const { code, msg } = error.response.data
-      // token 过期，跳转登录页
-      if (code === 'A0230') {
-        ElMessageBox.confirm('当前页面已失效，请重新登录', '提示', {
-          confirmButtonText: '确定',
-          type: 'warning',
-        }).then(() => {
-          localStorage.clear() // @vueuse/core 自动导入
-          window.location.href = '/'
-        })
-      } else {
-        ElMessage.error(msg || '系统出错')
+    console.log('response', response)
+    if (response.data && response.data.errorCode === 'UNAUTHORIZED_LOGIN') {
+      // 401, token失效
+      dialog.closeAll()
+      userStore.logout()
+    } else {
+      if (response.headers['refreshedtoken'] != null) {
+        userStore.setToken(response.headers['refreshedtoken'])
       }
     }
-    return Promise.reject(error.message)
+    return response
+  },
+  (error) => {
+    console.log('error', error)
+    const response = error.response
+    if (response && response.data) {
+      if (response.data.errorCode === 'UNAUTHORIZED_LOGIN') {
+        dialog.closeAll()
+        userStore.logout()
+      }
+      return Promise.reject(response.data)
+    } else {
+      return Promise.reject(new Error('数据获取失败，请稍后再试'))
+    }
   }
 )
 

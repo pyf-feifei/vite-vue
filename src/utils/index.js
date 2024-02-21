@@ -1,3 +1,4 @@
+import JSEncrypt from 'jsencrypt'
 /**
  * Check if an element has a class
  * @param {HTMLElement} ele
@@ -479,7 +480,16 @@ export function camelToUnderScore(obj) {
   })
   return newObj
 }
-
+/**
+ * 加密
+ * @param {*} value 要加密的字符串
+ */
+export function encrypt(value) {
+  if (value == null || value === '') return null
+  const encrypt = new JSEncrypt()
+  encrypt.setPublicKey(import.meta.env.VITE_APP_PUBLI_CKEY)
+  return encodeURIComponent(encrypt.encrypt(value))
+}
 export default {
   hasClass,
   addClass,
@@ -500,4 +510,5 @@ export default {
   getSonObjsById,
   toCamelCase,
   camelToUnderScore,
+  encrypt,
 }

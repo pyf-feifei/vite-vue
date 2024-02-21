@@ -16,6 +16,8 @@
     "@wangeditor/editor-for-vue": "^5.1.12",
     "axios": "^1.5.1",
     "element-plus": "^2.3.14",
+    "jsencrypt": "^3.3.2",
+    "json-bigint": "^1.0.0",
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
     "pinia": "^2.1.6",

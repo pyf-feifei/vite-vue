@@ -43,7 +43,7 @@ class Dialog {
     })
   }
 
-  hideAll() {
+  closeAll() {
     this.dialogs.forEach((dialog) => dialog.hide()) // 隐藏所有弹窗
     this.dialogs = [] // 清空弹窗列表
   }

@@ -48,7 +48,7 @@ const openDialog = () => {
   })
 }
 const doLogIn = () => {
-  userStore.login({ name: '', password: '' }).then(() => {})
+  userStore.login({ loginName: 'admin', password: 'mima334' }).then(() => {})
 }
 const value = ref('操')
 const showSettings = computed(() => settingsStore.showSettings)
