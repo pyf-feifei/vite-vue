@@ -8,10 +8,10 @@
         }"
         @click="show = !show"
       >
-        <i-ep-close v-if="show" />
-        <i-ep-setting v-if="!show" />
+        <i-ep-close v-show="show" />
+        <i-ep-setting v-show="!show" />
       </div>
-      <div v-if="show" ref="rightPanel" class="right-panel-in">
+      <div v-show="show" ref="rightPanel" class="right-panel-in">
         <div>
           <slot></slot>
         </div>

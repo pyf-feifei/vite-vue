@@ -22,10 +22,14 @@ import IconEpMoon from '~icons/ep/moon'
 import settingsStore from '@/store/modules/settings'
 
 /**
- * 暗黑模式
+ * 切换暗黑模式
  */
 const isDark = useDark()
-const toggleDark = () => useToggle(isDark)
+isDark.value = settingsStore.theme === 'dark'
+const toggleDark = () => {
+  console.log('isDark', isDark)
+  useToggle(isDark)
+}
 </script>
 <style lang="scss" scoped>
 .settings-container {
