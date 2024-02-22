@@ -88,14 +88,22 @@ export default {
   overflow: auto;
   .dialog-in {
     position: relative;
-    margin: 15vh auto 50px;
-    background: #ffffff;
-    border-radius: 2px;
-    box-shadow: 0px 12px 32px 4px rgba(0, 0, 0, 0.04),
-      0px 8px 20px rgba(0, 0, 0, 0.08);
+    --el-dialog-margin-top: 15vh;
+    --el-dialog-bg-color: var(--el-bg-color);
+    --el-dialog-box-shadow: var(--el-box-shadow);
+    --el-dialog-title-font-size: var(--el-font-size-large);
+    --el-dialog-content-font-size: 14px;
+    --el-dialog-font-line-height: var(--el-font-line-height-primary);
+    --el-dialog-padding-primary: 16px;
+    --el-dialog-border-radius: var(--el-border-radius-small);
+    position: relative;
+    margin: var(--el-dialog-margin-top, 15vh) auto 50px;
+    background: var(--el-dialog-bg-color);
+    border-radius: var(--el-dialog-border-radius);
+    box-shadow: var(--el-dialog-box-shadow);
     box-sizing: border-box;
-    padding: 16px;
-    width: 50%;
+    padding: var(--el-dialog-padding-primary);
+    width: var(--el-dialog-width, 50%);
     overflow-wrap: break-word;
     .dialog-in-title {
       padding-bottom: 16px;
