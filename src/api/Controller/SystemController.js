@@ -9,4 +9,14 @@ export default class SystemController {
       httpOption
     )
   }
+
+  static logout(params, axiosOption, httpOption) {
+    return sender.doUrl(
+      'admin/upms/login/doLogout',
+      'post',
+      params,
+      axiosOption,
+      httpOption
+    )
+  }
 }

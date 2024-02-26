@@ -36,6 +36,7 @@ watch(show, (value) => {})
   top: 0px;
   right: 0px;
   height: 100%;
+  z-index: 999;
 
   background-color: var(--el-bg-color-overlay);
   box-shadow: 0 0 15px 0 rgb(0 0 0 / 5%);

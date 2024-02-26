@@ -62,6 +62,18 @@ export default defineConfig((mode) => {
       },
       extensions: ['.mjs', '.js', '.ts', '.jsx', '.tsx', '.json', '.vue'],
     },
+    css: {
+      // CSS 预处理器
+      preprocessorOptions: {
+        // 定义全局 SCSS 变量
+        scss: {
+          javascriptEnabled: true,
+          additionalData: `
+            @use "@/styles/variables.scss" as *;
+          `,
+        },
+      },
+    },
     server: {
       host: '0.0.0.0', //解决vite use--host to expose
       port: Number(env.VITE_APP_PORT),

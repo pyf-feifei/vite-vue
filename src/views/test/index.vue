@@ -20,18 +20,19 @@
     <el-button type="info" v-testDirective="true" @click="doLogIn"
       >登录</el-button
     >
+    <!-- <size-select class="navbar-item" /> -->
     <el-button type="primary" @click="openDialog">测试弹窗</el-button>
     <editor v-model="value" style="height: 600px" />
-    <RightPanel v-if="showSettings">
+    <!-- <RightPanel v-if="showSettings">
       <settings />
-    </RightPanel>
+    </RightPanel> -->
   </div>
 </template>
 
 <script setup>
 import userStore from '@/store/modules/user'
 import settingsStore from '@/store/modules/settings'
-import { Settings } from '@/Layout/components/index'
+// import { Settings } from '@/Layout/components/index'
 import Editor from '@/components/WangEditor/index.vue'
 import RightPanel from '@/components/RightPanel/index.vue'
 import TestDialogs from './dialogs/TestDialogs.vue'

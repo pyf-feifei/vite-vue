@@ -38,7 +38,7 @@ const useUserStore = defineStore('user', {
       this.token = data
     },
     logout() {
-      if (this.token.value) {
+      if (this.token) {
         return SystemController.logout().then(() => {
           this.reset()
         })
