@@ -58,21 +58,27 @@ const toggleDark = () => {
 const themeColors = ref([
   {
     '--el-color-primary': '#409EFF',
+    '--main-color': '#333333',
   },
   {
     '--el-color-primary': '#304156',
+    '--main-color': '#333333',
   },
   {
     '--el-color-primary': '#11a983',
+    '--main-color': '#333333',
   },
   {
     '--el-color-primary': '#13c2c2',
+    '--main-color': '#333333',
   },
   {
     '--el-color-primary': '#6959CD',
+    '--main-color': '#333333',
   },
   {
     '--el-color-primary': '#f5222d',
+    '--main-color': '#333333',
   },
 ])
 /**
