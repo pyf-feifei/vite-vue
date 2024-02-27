@@ -34,7 +34,6 @@ import defaultSettings from '@/settings'
 const fixedHeader = computed(() => settingsStore.fixedHeader)
 const showTagsView = computed(() => settingsStore.tagsView)
 const layout = computed(() => settingsStore.layout)
-console.log('layout', settingsStore.layout)
 
 const classObj = computed(() => ({
   hideSidebar: !appStore.sidebar.opened,
