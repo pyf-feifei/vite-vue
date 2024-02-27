@@ -1,5 +1,10 @@
 <template>
-  <div class="logo-container">
+  <div
+    class="logo-container"
+    :class="{
+      backgroundColorTransparent: settingsStore.backgroundColorTransparent,
+    }"
+  >
     <transition enter-active-class="animate__animated animate__fadeInLeft">
       <router-link class="wh-full flex-center" to="/">
         <img v-if="settingsStore.sidebarLogo" :src="logo" class="logo-image" />

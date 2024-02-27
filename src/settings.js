@@ -7,6 +7,7 @@ const defaultSettings = {
   size: 'default',
   fixedHeader: false, //是否固定头部
   tagsView: false, //显示tag
+  backgroundColorTransparent: true, //背景需要透明
 }
 
 export default defaultSettings

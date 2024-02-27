@@ -6,12 +6,23 @@
       class="fixed z-1000 bg-black bg-opacity-20"
       @click="handleOutsideClick"
     ></div>
-    <Sidebar class="sidebar-container" />
+    <Sidebar
+      class="sidebar-container"
+      :class="{
+        backgroundColorTransparent: settingsStore.backgroundColorTransparent,
+      }"
+    />
 
     <!-- 混合布局 -->
 
     <!-- 左侧布局|| 顶部布局 -->
-    <div :class="{ hasTagsView: showTagsView }" class="main-container">
+    <div
+      :class="{
+        hasTagsView: showTagsView,
+        backgroundColorTransparent: settingsStore.backgroundColorTransparent,
+      }"
+      class="main-container"
+    >
       <div :class="{ 'fixed-header': fixedHeader }">
         <NavBar v-if="layout === 'left'" />
         <TagsView v-if="showTagsView" />
@@ -42,6 +53,7 @@ const classObj = computed(() => ({
   'layout-left': layout.value === 'left',
   'layout-top': layout.value === 'top',
   'layout-mix': layout.value === 'mix',
+  backgroundColorTransparent: `${settingsStore.backgroundColorTransparent}  !important`,
 }))
 
 const width = useWindowSize().width

@@ -11,6 +11,7 @@ import 'uno.css'
 
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import '@/styles/dark.scss'
+import '@/styles/index.scss'
 
 import { setupDirective } from '@/directive'
 import { setupDialog } from '@/utils/dialog/Dialog'

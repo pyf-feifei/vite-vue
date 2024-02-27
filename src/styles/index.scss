@@ -1,0 +1,8 @@
+.backgroundColorTransparent {
+  background-color: transparent !important;
+  .el-scrollbar {
+    .el-menu {
+      background-color: transparent;
+    }
+  }
+}

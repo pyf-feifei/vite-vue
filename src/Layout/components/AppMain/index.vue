@@ -1,5 +1,10 @@
 <template>
-  <section class="app-main">
+  <section
+    class="app-main"
+    :class="{
+      backgroundColorTransparent: settingsStore.backgroundColorTransparent,
+    }"
+  >
     <router-view>
       <template #default="{ Component, route }">
         <transition mode="out-in">
@@ -14,6 +19,7 @@
 
 <script setup>
 import tagsViewStore from '@/store/modules/tagsView'
+import settingsStore from '@/store/modules/settings'
 
 const cachedViews = computed(() => tagsViewStore.cachedViews) // 缓存页面集合
 </script>

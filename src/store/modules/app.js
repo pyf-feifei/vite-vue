@@ -7,10 +7,14 @@ const useAppStore = defineStore('app', {
       // 所有这些属性都将自动推断出它们的类型
       count: 10,
       device: useStorage('device', 'desktop'),
-      size: useStorage('size', defaultSettings.size, () => {
-        localStorage.setItem('size', defaultSettings.size)
-        return localStorage
-      }),
+      size: useStorage(
+        'size',
+        defaultSettings.size,
+        (() => {
+          localStorage.setItem('size', defaultSettings.size)
+          return localStorage
+        })()
+      ),
 
       sidebarStatus: useStorage('sidebarStatus', 'closed'),
 
