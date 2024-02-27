@@ -81,7 +81,29 @@ const useSettingsStore = defineStore('setting', {
       ),
     }
   },
-  getters: {},
-  actions: {},
+  getters: {
+    settingsMap() {
+      return {
+        fixedHeader: this.fixedHeader,
+        tagsView: this.tagsView,
+        sidebarLogo: this.sidebarLogo,
+        layout: this.layout,
+        themeColor: this.themeColor,
+        theme: this.theme,
+      }
+    },
+  },
+  actions: {
+    changeSetting({ key, value }) {
+      let setting = this.settingsMap[key]
+      if (setting) {
+        this[key] = value
+        // Special handling for theme changes
+        if (key === 'theme') {
+          document.documentElement.classList.toggle('dark', value === 'dark')
+        }
+      }
+    },
+  },
 })
 export default useSettingsStore()
