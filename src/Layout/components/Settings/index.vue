@@ -34,6 +34,7 @@
 import IconEpSunny from '~icons/ep/sunny'
 import IconEpMoon from '~icons/ep/moon'
 import settingsStore from '@/store/modules/settings'
+import variables from '@/styles/variables.module.scss'
 
 /**
  * 切换暗黑模式
@@ -58,27 +59,69 @@ const toggleDark = () => {
 const themeColors = ref([
   {
     '--el-color-primary': '#409EFF',
-    '--main-color': '#333333',
+    '--main-color': variables['main-color'],
+    '--menu-background': variables['menu-background'],
+    '--el-menu-hover-bg-color': variables['menu-background'],
+    '--menu-text': variables['menu-text'],
+    '--menu-active-text': variables['menu-active-text'],
+    '--sub-menu-background': variables['sub-menu-background'],
+    '--sub-menu-active-text': variables['sub-menu-active-text'],
+    '--sub-menu-hover': variables['sub-menu-hover'],
   },
   {
     '--el-color-primary': '#304156',
-    '--main-color': '#333333',
+    '--main-color': variables['main-color'],
+    '--menu-background': variables['menu-background'],
+    '--el-menu-hover-bg-color': variables['menu-background'],
+    '--menu-text': variables['menu-text'],
+    '--menu-active-text': variables['menu-active-text'],
+    '--sub-menu-background': variables['sub-menu-background'],
+    '--sub-menu-active-text': variables['sub-menu-active-text'],
+    '--sub-menu-hover': variables['sub-menu-hover'],
   },
   {
     '--el-color-primary': '#11a983',
-    '--main-color': '#333333',
+    '--main-color': variables['main-color'],
+    '--menu-background': variables['menu-background'],
+    '--el-menu-hover-bg-color': variables['menu-background'],
+    '--menu-text': variables['menu-text'],
+    '--menu-active-text': variables['menu-active-text'],
+    '--sub-menu-background': variables['sub-menu-background'],
+    '--sub-menu-active-text': variables['sub-menu-active-text'],
+    '--sub-menu-hover': variables['sub-menu-hover'],
   },
   {
     '--el-color-primary': '#13c2c2',
-    '--main-color': '#333333',
+    '--main-color': variables['main-color'],
+    '--menu-background': variables['menu-background'],
+    '--el-menu-hover-bg-color': variables['menu-background'],
+    '--menu-text': variables['menu-text'],
+    '--menu-active-text': variables['menu-active-text'],
+    '--sub-menu-background': variables['sub-menu-background'],
+    '--sub-menu-active-text': variables['sub-menu-active-text'],
+    '--sub-menu-hover': variables['sub-menu-hover'],
   },
   {
     '--el-color-primary': '#6959CD',
-    '--main-color': '#333333',
+    '--main-color': variables['main-color'],
+    '--menu-background': variables['menu-background'],
+    '--el-menu-hover-bg-color': variables['menu-background'],
+    '--menu-text': variables['menu-text'],
+    '--menu-active-text': variables['menu-active-text'],
+    '--sub-menu-background': variables['sub-menu-background'],
+    '--sub-menu-active-text': variables['sub-menu-active-text'],
+    '--sub-menu-hover': variables['sub-menu-hover'],
   },
   {
     '--el-color-primary': '#f5222d',
-    '--main-color': '#333333',
+    '--main-color': variables['main-color'],
+    '--menu-background': variables['menu-background'],
+    '--el-menu-hover-bg-color': variables['menu-background'],
+    '--menu-text': variables['menu-text'],
+    '--menu-active-text': variables['menu-active-text'],
+    '--sub-menu-background': variables['sub-menu-background'],
+    '--sub-menu-active-text': variables['sub-menu-active-text'],
+    '--sub-menu-hover': variables['sub-menu-hover'],
   },
 ])
 /**
@@ -88,7 +131,6 @@ function changeThemeColor(colorObj) {
   Object.entries(colorObj).forEach(([key, val]) => {
     document.documentElement.style.setProperty(key, val)
     if (key === '--el-color-primary') {
-      console.log('val', val)
       settingsStore.changeSetting({ key: 'themeColor', value: val })
     }
   })
