@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import defaultSettings from '@/settings'
+const sidebarStatus = useStorage('sidebarStatus', 'closed')
 const useAppStore = defineStore('app', {
   // 为了完整类型推理，推荐使用箭头函数
   state: () => {
@@ -16,10 +17,10 @@ const useAppStore = defineStore('app', {
         })()
       ),
 
-      sidebarStatus: useStorage('sidebarStatus', 'closed'),
+      sidebarStatus: sidebarStatus,
 
       sidebar: reactive({
-        opened: true,
+        opened: sidebarStatus !== "closed",
         withoutAnimation: false,
       }),
       activeTopMenuPath: useStorage('activeTopMenuPath', ''),
@@ -36,7 +37,7 @@ const useAppStore = defineStore('app', {
     },
     toggleSidebar() {
       this.sidebar.opened = !this.sidebar.opened
-      if (sidebar.opened) {
+      if (this.sidebar.opened) {
         this.sidebarStatus = 'opened'
       } else {
         this.sidebarStatus = 'closed'
