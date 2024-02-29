@@ -1,11 +1,8 @@
 <template>
-  <section
-    class="app-main"
-    :class="{
-      backgroundColorTransparent: settingsStore.backgroundColorTransparent,
-    }"
-  >
-    <router-view>
+  <section class="app-main" :class="{
+    backgroundColorTransparent: settingsStore.backgroundColorTransparent,
+  }">
+    <router-view :key="`${currentRoute.path}`">
       <template #default="{ Component, route }">
         <transition mode="out-in">
           <keep-alive :include="cachedViews">
@@ -21,6 +18,7 @@
 import tagsViewStore from '@/store/modules/tagsView'
 import settingsStore from '@/store/modules/settings'
 
+const currentRoute = useRoute();
 const cachedViews = computed(() => tagsViewStore.cachedViews) // 缓存页面集合
 </script>
 
@@ -33,7 +31,7 @@ const cachedViews = computed(() => tagsViewStore.cachedViews) // 缓存页面集
   background-color: var(--el-bg-color-page);
 }
 
-.fixed-header + .app-main {
+.fixed-header+.app-main {
   min-height: 100vh;
   padding-top: $navbar-height;
 }
@@ -44,7 +42,7 @@ const cachedViews = computed(() => tagsViewStore.cachedViews) // 缓存页面集
     min-height: calc(100vh - $navbar-height - $tags-view-height);
   }
 
-  .fixed-header + .app-main {
+  .fixed-header+.app-main {
     min-height: 100vh;
     padding-top: $navbar-height + $tags-view-height;
   }
@@ -58,7 +56,7 @@ const cachedViews = computed(() => tagsViewStore.cachedViews) // 缓存页面集
     overflow-y: auto;
   }
 
-  .fixed-header + .app-main {
+  .fixed-header+.app-main {
     min-height: calc(100vh - $navbar-height);
     padding-top: 0;
   }
@@ -69,7 +67,7 @@ const cachedViews = computed(() => tagsViewStore.cachedViews) // 缓存页面集
       min-height: calc(100vh - $navbar-height - $tags-view-height);
     }
 
-    .fixed-header + .app-main {
+    .fixed-header+.app-main {
       min-height: calc(100vh - $navbar-height);
       padding-top: $tags-view-height;
     }
@@ -77,12 +75,12 @@ const cachedViews = computed(() => tagsViewStore.cachedViews) // 缓存页面集
 }
 
 .layout-top {
-  .fixed-header + .app-main {
+  .fixed-header+.app-main {
     padding-top: 0;
   }
 
   .hasTagsView {
-    .fixed-header + .app-main {
+    .fixed-header+.app-main {
       padding-top: $tags-view-height;
     }
   }

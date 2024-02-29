@@ -79,6 +79,74 @@ const useSettingsStore = defineStore('setting', {
           return localStorage
         })()
       ),
+      themeColors: ref([
+        {
+          '--el-color-primary': '#4C5FE8',
+          '--main-color': '#333333',
+          // '--menu-background': 'rgba(76, 95, 232, 0.4)',
+          '--el-menu-hover-bg-color': '#304156',
+          '--menu-text': '#bfcbd9',
+          '--menu-active-text': '#4c5fe8',
+          '--sub-menu-background': '#304156',
+          '--sub-menu-active-text': '#4c5fe8',
+          '--sub-menu-hover': '#4c5fe8',
+        },
+        {
+          '--el-color-primary': '#304156',
+          '--main-color': '#333333',
+          // '--menu-background': 'rgba(48, 65, 86, 0.4)',
+          '--el-menu-hover-bg-color': '#304156',
+          '--menu-text': '#bfcbd9',
+          '--menu-active-text': '#4c5fe8',
+          '--sub-menu-background': '#304156',
+          '--sub-menu-active-text': '#4c5fe8',
+          '--sub-menu-hover': '#4c5fe8',
+        },
+        {
+          '--el-color-primary': '#11a983',
+          '--main-color': '#333333',
+          // '--menu-background': 'rgba(17, 169, 131, 0.4)',
+          '--el-menu-hover-bg-color': '#304156',
+          '--menu-text': '#bfcbd9',
+          '--menu-active-text': '#4c5fe8',
+          '--sub-menu-background': '#304156',
+          '--sub-menu-active-text': '#4c5fe8',
+          '--sub-menu-hover': '#4c5fe8',
+        },
+        {
+          '--el-color-primary': '#13c2c2',
+          '--main-color': '#333333',
+          // '--menu-background': 'rgba(19, 194, 194, 0.4)',
+          '--el-menu-hover-bg-color': '#304156',
+          '--menu-text': '#bfcbd9',
+          '--menu-active-text': '#4c5fe8',
+          '--sub-menu-background': '#304156',
+          '--sub-menu-active-text': '#4c5fe8',
+          '--sub-menu-hover': '#4c5fe8',
+        },
+        {
+          '--el-color-primary': '#6959CD',
+          '--main-color': '#333333',
+          // '--menu-background': 'rgba(105, 89, 205, 0.4)', 
+          '--el-menu-hover-bg-color': '#304156',
+          '--menu-text': '#bfcbd9',
+          '--menu-active-text': '#4c5fe8',
+          '--sub-menu-background': '#304156',
+          '--sub-menu-active-text': '#4c5fe8',
+          '--sub-menu-hover': '#4c5fe8',
+        },
+        {
+          '--el-color-primary': '#f5222d',
+          '--main-color': '#333333',
+          // '--menu-background': 'rgba(245, 34, 45, 0.4)',
+          '--el-menu-hover-bg-color': '#304156',
+          '--menu-text': '#bfcbd9',
+          '--menu-active-text': '#4c5fe8',
+          '--sub-menu-background': '#304156',
+          '--sub-menu-active-text': '#4c5fe8',
+          '--sub-menu-hover': '#4c5fe8',
+        },
+      ]),
     }
   },
   getters: {
@@ -104,6 +172,19 @@ const useSettingsStore = defineStore('setting', {
         }
       }
     },
+    changeThemeColor(colorObj) {
+      Object.entries(colorObj).forEach(([key, val]) => {
+        document.documentElement.style.setProperty(key, val)
+        if (key === '--el-color-primary') {
+          this.changeSetting({ key: 'themeColor', value: val })
+        }
+      })
+    },
   },
 })
-export default useSettingsStore()
+const settingsStore = useSettingsStore()
+const findColorObj = settingsStore.themeColors.find(
+  (item) => item['--el-color-primary'] === settingsStore.themeColor
+)
+settingsStore.changeThemeColor(findColorObj || settingsStore.themeColors[0]) //初始化时就重置主题
+export default settingsStore 

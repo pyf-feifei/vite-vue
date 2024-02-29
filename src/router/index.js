@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 export const Layout = () => import('@/layout/index.vue')
-const routes = [
+export const constantRoutes = [
   // {
   //   path: '/:pathMatch(.*)*',
   //   redirect: '/login',
@@ -30,6 +30,9 @@ const routes = [
     path: '/',
     name: '/',
     component: Layout,
+    meta: {
+      title: '首页',
+    },
     redirect: {
       name: 'dashboard',
     },
@@ -73,22 +76,36 @@ const routes = [
     ],
   },
   {
-    path: '/test/home',
-    name: 'testhome',
-    component: () => import('@/views/home/index.vue'),
-    //我事先在src下面创建了一个view文件夹，在view文件下面创建了home.vue文件
+    path: '/test',
+    name: '/test',
+    component: Layout,
+    children: [
+      {
+        path: 'testhome',
+        component: () => import('@/views/home/index.vue'),
+        name: 'testhome',
+        meta: {
+          title: 'test',
+          icon: 'homepage',
+          affix: true,
+          keepAlive: true,
+          alwaysShow: false,
+        },
+      },
+    ],
   },
   {
     path: '/test/test',
     name: 'testtest',
     component: () => import('@/views/test/index.vue'),
+    meta: { hidden: true },
     //我事先在src下面创建了一个view文件夹，在view文件下面创建了home.vue文件
   },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes,
+  routes: constantRoutes,
   // 刷新时，滚动条位置还原
   scrollBehavior: () => ({ left: 0, top: 0 }),
 })

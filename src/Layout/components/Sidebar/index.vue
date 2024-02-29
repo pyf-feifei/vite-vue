@@ -5,7 +5,7 @@
     <template v-if="true">
       <SidebarLogo v-if="sidebarLogo" />
       <el-scrollbar>
-        <SidebarMenu base-path="" />
+        <SidebarMenu :menu-list="constantRoutes" base-path="" />
       </el-scrollbar>
       <NavbarRight v-if="layout === 'top'" />
     </template>
@@ -14,6 +14,8 @@
 
 <script setup>
 import settingsStore from '@/store/modules/settings'
+import appStore from '@/store/modules/app'
+import { constantRoutes } from "@/router";
 
 const sidebarLogo = computed(() => settingsStore.sidebarLogo)
 const layout = computed(() => settingsStore.layout)

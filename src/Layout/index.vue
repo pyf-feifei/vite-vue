@@ -1,31 +1,22 @@
 <template>
   <div class="wh-full" :class="classObj">
     <!-- 遮罩层 -->
-    <div
-      v-if="classObj.mobile && classObj.openSidebar"
-      class="fixed z-1000 bg-black bg-opacity-20"
-      @click="handleOutsideClick"
-    ></div>
-    <Sidebar
-      class="sidebar-container"
-      :class="{
-        backgroundColorTransparent: settingsStore.backgroundColorTransparent,
-      }"
-    />
+    <div v-if="classObj.mobile && classObj.openSidebar" class="fixed z-1000 bg-black bg-opacity-20"
+      @click="handleOutsideClick"></div>
+    <Sidebar class="sidebar-container" :class="{
+      backgroundColorTransparent: settingsStore.backgroundColorTransparent,
+    }" />
 
     <!-- 混合布局 -->
 
     <!-- 左侧布局|| 顶部布局 -->
-    <div
-      :class="{
-        hasTagsView: showTagsView,
-        backgroundColorTransparent: settingsStore.backgroundColorTransparent,
-      }"
-      class="main-container"
-    >
+    <div :class="{
+      hasTagsView: showTagsView,
+      backgroundColorTransparent: settingsStore.backgroundColorTransparent,
+    }" class="main-container">
       <div :class="{ 'fixed-header': fixedHeader }">
         <NavBar v-if="layout === 'left'" />
-        <TagsView v-if="showTagsView" />
+        <!-- <TagsView v-if="showTagsView" /> -->
       </div>
       <AppMain />
       <RightPanel v-if="defaultSettings.showSettings">
@@ -44,6 +35,7 @@ import defaultSettings from '@/settings'
 
 const fixedHeader = computed(() => settingsStore.fixedHeader)
 const showTagsView = computed(() => settingsStore.tagsView)
+console.log('showTagsView', showTagsView);
 const layout = computed(() => settingsStore.layout)
 
 const classObj = computed(() => ({
@@ -53,9 +45,8 @@ const classObj = computed(() => ({
   'layout-left': layout.value === 'left',
   'layout-top': layout.value === 'top',
   'layout-mix': layout.value === 'mix',
-  backgroundColorTransparent: `${settingsStore.backgroundColorTransparent}  !important`,
+  backgroundColorTransparent: settingsStore.backgroundColorTransparent,
 }))
-
 const width = useWindowSize().width
 const WIDTH = 992 // 响应式布局容器固定宽度  大屏（>=1200px） 中屏（>=992px） 小屏（>=768px）
 

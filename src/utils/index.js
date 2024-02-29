@@ -58,7 +58,7 @@ export function deepMerge(obj1, obj2) {
   for (var key in obj2) {
     obj1[key] =
       obj1[key] &&
-      Object.prototype.toString.call(obj1[key]) === '[object Object]'
+        Object.prototype.toString.call(obj1[key]) === '[object Object]'
         ? deepMerge(obj1[key], obj2[key])
         : obj2[key]
   }
@@ -490,6 +490,15 @@ export function encrypt(value) {
   encrypt.setPublicKey(import.meta.env.VITE_APP_PUBLI_CKEY)
   return encodeURIComponent(encrypt.encrypt(value))
 }
+/**
+ * @param {string} path
+ * @returns {Boolean}
+ */
+export function isExternal(path) {
+  const isExternal = /^(https?:|http?:|mailto:|tel:)/.test(path);
+  return isExternal;
+}
+
 export default {
   hasClass,
   addClass,
@@ -511,4 +520,5 @@ export default {
   toCamelCase,
   camelToUnderScore,
   encrypt,
+  isExternal
 }

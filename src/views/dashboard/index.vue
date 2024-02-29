@@ -1,6 +1,8 @@
 <template>
-  <div class="box">dashboard{{ count }}</div>
-  <HelloWorld msg="dashboard"></HelloWorld>
+  <div>
+    <div class="box">dashboard{{ count }}</div>
+    <HelloWorld msg="dashboard"></HelloWorld>
+  </div>
 </template>
 
 <script setup>

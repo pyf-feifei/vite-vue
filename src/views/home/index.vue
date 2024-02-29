@@ -1,6 +1,8 @@
 <template>
-  <div class="box">首页{{ count }}</div>
-  <HelloWorld msg="你好啊"></HelloWorld>
+  <div>
+    <div class="box">首页{{ count }}</div>
+    <HelloWorld msg="你好啊"></HelloWorld>
+  </div>
 </template>
 
 <script setup>

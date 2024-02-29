@@ -15,7 +15,6 @@ router.beforeEach(async (to, from, next) => {
   } else {
     next()
   }
-  next()
 })
 
 router.afterEach(() => {
