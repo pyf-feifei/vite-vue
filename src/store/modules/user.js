@@ -2,14 +2,17 @@ import { defineStore } from 'pinia'
 import { loginApi } from '@/api/auth'
 import { SystemController } from '@/api'
 import { encrypt } from '@/utils/index'
-import { useStorage } from '@vueuse/core'
+const userInfo = useStorage('userInfo', {}, localStorage, {
+  mergeDefaults: true,
+})
+userInfo.value = null
 const useUserStore = defineStore('user', {
   // 为了完整类型推理，推荐使用箭头函数
   state: () => {
     return {
       // 所有这些属性都将自动推断出它们的类型,
-      token: useStorage('sds_token', ''),
-      userInfo: useStorage('userInfo', ''),
+      token: useStorage('token', ''),
+      userInfo: userInfo,
     }
   },
   getters: {},
