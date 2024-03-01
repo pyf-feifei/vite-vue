@@ -9,6 +9,7 @@
   --sub-menu-hover: #001528;
   --sidebar-logo-background: #2d3748;
   --main-color: #333333;
+  --main-color-rgbnorgb: 51, 51, 51; //--main-color对应的rgb没有rgb前缀
 }
 
 /** 暗黑主题 */
@@ -22,6 +23,7 @@ html.dark {
   --sub-menu-hover: rgb(0 0 0 / 20%);
   --sidebar-logo-background: rgb(0 0 0 / 20%);
   --main-color: #fff;
+  --main-color-rgbnorgb: 255, 255, 255; //--main-color对应的rgb没有rgb前缀
 }
 
 $menu-background: var(--menu-background); // 菜单背景色
@@ -35,6 +37,7 @@ $sidebar-logo-background: var(--sidebar-logo-background); // 侧边栏 Logo 背�
 
 //主要字体颜色
 $main-color: var(--main-color);
+$main-color-rgbnorgb: var(--main-color-rgbnorgb);
 
 $sidebar-width: 210px; // 侧边栏宽度
 $sidebar-width-collapsed: 54px; // 侧边栏收缩宽度
