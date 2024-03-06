@@ -18,7 +18,7 @@
       <div class="flex-center ml-1">
         <img
           :src="
-            userStore.userInfo.avatar ||
+            userStore?.userInfo?.avatar ||
             'https://avatars.githubusercontent.com/u/141120814?s=200&v=4'
           "
           width="40px"
