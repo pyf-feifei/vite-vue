@@ -1,9 +1,16 @@
 <template>
   <el-breadcrumb class="flex-y-center">
-    <transition-group enter-active-class="animate__animated animate__fadeInRight">
+    <transition-group
+      enter-active-class="animate__animated animate__fadeInRight"
+    >
       <el-breadcrumb-item v-for="(item, index) in breadcrumbs" :key="item.path">
-        <span v-if="item.redirect === 'noredirect' || index === breadcrumbs.length - 1
-          " class="color-gray-400">{{ item.meta.title }}</span>
+        <span
+          v-if="
+            item.redirect === 'noredirect' || index === breadcrumbs.length - 1
+          "
+          class="color-gray-400"
+          >{{ item.meta.title }}</span
+        >
         <a v-else @click.prevent="handleLink(item)">
           {{ item.meta.title }}
         </a>
@@ -12,72 +19,72 @@
   </el-breadcrumb>
 </template>
 
-<script setup >
-import { compile } from "path-to-regexp";
-import router from "@/router";
+<script setup>
+import { compile } from 'path-to-regexp'
+import router from '@/router'
 
-const currentRoute = useRoute();
+const currentRoute = useRoute()
 const pathCompile = (path) => {
-  const { params } = currentRoute;
-  const toPath = compile(path);
-  return toPath(params);
-};
+  const { params } = currentRoute
+  const toPath = compile(path)
+  return toPath(params)
+}
 
-const breadcrumbs = ref([]);
+const breadcrumbs = ref([])
 
 function getBreadcrumb() {
   let matched = currentRoute.matched.filter(
     (item) => item.meta && item.meta.title
-  );
-  const first = matched[0];
-  console.log('first', first);
+  )
+  const first = matched[0]
+  console.log('first', first)
   if (!isDashboard(first)) {
     matched = [
       // { path: "/dashboard", meta: { title: "dashboard" } },
-    ].concat(matched);
+    ].concat(matched)
   }
   breadcrumbs.value = matched.filter((item) => {
-    return item.meta && item.meta.title && item.meta.breadcrumb !== false;
-  });
+    return item.meta && item.meta.title && item.meta.breadcrumb !== false
+  })
 }
 
 function isDashboard(route) {
-  const name = route && route.name;
+  const name = route && route.name
   if (!name) {
-    return false;
+    return false
   }
   return (
     name.toString().trim().toLocaleLowerCase() ===
-    "Dashboard".toLocaleLowerCase()
-  );
+    'Dashboard'.toLocaleLowerCase()
+  )
 }
 
 function handleLink(item) {
-  const { redirect, path } = item;
+  const { redirect, path } = item
   if (redirect) {
     router.push(redirect).catch((err) => {
-      console.warn(err);
-    });
-    return;
+      console.warn(err)
+    })
+    return
   }
   router.push(pathCompile(path)).catch((err) => {
-    console.warn(err);
-  });
+    console.warn(err)
+  })
 }
 
 watch(
   () => currentRoute.path,
   (path) => {
-    if (path.startsWith("/redirect/")) {
-      return;
+    if (path.startsWith('/redirect/')) {
+      return
     }
-    getBreadcrumb();
+    getBreadcrumb()
   }
-);
+)
 
 onBeforeMount(() => {
-  getBreadcrumb();
-});
+  getBreadcrumb()
+})
 </script>
 
 <style lang="scss" scoped>

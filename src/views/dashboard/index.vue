@@ -1,7 +1,8 @@
 <template>
   <div>
-    <div class="box">dashboard{{ count }}</div>
     <HelloWorld msg="dashboard"></HelloWorld>
+
+    <IkuiIcon></IkuiIcon>
   </div>
 </template>
 

@@ -11,4 +11,4 @@ const defaultSettings = {
   themeColor: '#4C5FE8',
 }
 
-export default defaultSettings 
+export default defaultSettings
