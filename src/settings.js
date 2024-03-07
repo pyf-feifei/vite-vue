@@ -6,7 +6,7 @@ const defaultSettings = {
   sidebarLogo: true, //显示logo
   size: 'default',
   fixedHeader: false, //是否固定头部
-  tagsView: false, //显示tag
+  tagsView: true, //显示tag
   backgroundColorTransparent: false, //背景需要透明
   themeColor: '#4C5FE8',
 }

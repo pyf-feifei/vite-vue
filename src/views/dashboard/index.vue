@@ -2,7 +2,7 @@
   <div>
     <HelloWorld msg="dashboard"></HelloWorld>
 
-    <IkuiIcon></IkuiIcon>
+    <!-- <IkuiIcon></IkuiIcon> -->
   </div>
 </template>
 

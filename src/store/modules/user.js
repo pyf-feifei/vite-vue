@@ -5,7 +5,8 @@ import { encrypt } from '@/utils/index'
 const userInfo = useStorage('userInfo', {}, localStorage, {
   mergeDefaults: true,
 })
-userInfo.value = null
+userInfo.value =
+  Object.keys(userInfo.value).length === 0 ? null : userInfo.value //解决useStorage存对象不同步的问题
 const useUserStore = defineStore('user', {
   // 为了完整类型推理，推荐使用箭头函数
   state: () => {
