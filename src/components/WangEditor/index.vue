@@ -21,6 +21,7 @@
 
 <script setup>
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
+import MdPlugin from '@wangeditor/plugin-md' // 引入Markdown插件
 
 const props = defineProps({
   modelValue: {
@@ -51,6 +52,7 @@ const editorConfig = ref({
 })
 
 const handleCreated = (editor) => {
+  console.log('editor', editor)
   editorRef.value = editor // 记录 editor 实例，重要！
 }
 

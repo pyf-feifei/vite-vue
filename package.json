@@ -14,6 +14,7 @@
     "@vueuse/core": "^10.5.0",
     "@wangeditor/editor": "^5.1.23",
     "@wangeditor/editor-for-vue": "^5.1.12",
+    "@wangeditor/plugin-md": "^1.0.0",
     "axios": "^1.5.1",
     "element-plus": "^2.3.14",
     "hls.js": "^1.5.7",
