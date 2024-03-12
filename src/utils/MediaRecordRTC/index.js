@@ -14,6 +14,80 @@ export default class MediaRecording {
     //
     this.recordingTimerIntervalId = null //录制中字样interval
   }
+
+  /**
+   * 是否有某些设备
+   */
+  static isHasDevice(key = 'videoinput') {
+    if (key === 'video') {
+      key = 'videoinput'
+    } else if (key === 'audio') {
+      key = 'audioinput'
+    }
+    return navigator.mediaDevices.enumerateDevices().then(
+      (devices) => {
+        const microphones = devices.filter((device) => device.kind === key)
+        if (microphones.length > 0) {
+          console.log('找到麦克风设备', microphones)
+          return true
+        } else {
+          console.log('未找到麦克风设备')
+          return false
+        }
+      },
+      (err) => {
+        console.error(err)
+        ElMessage.error('检测是否有设备失败！！')
+        return false
+      }
+    )
+  }
+
+  /**
+   * 是否有某些设备
+   */
+  static isHasDevicePermission(key = 'video') {
+    const param = {}
+    if (key) {
+      param[key] = true
+    }
+    return navigator.mediaDevices.getUserMedia(param).then(
+      (stream) => {
+        // 注意：记得停止使用媒体流
+        stream.getTracks().forEach((track) => track.stop())
+        return true
+      },
+      (err) => {
+        console.error(err)
+        ElMessage.error('测试设备失败！！')
+        return false
+      }
+    )
+  }
+
+  /**
+   * 某些设备是否可使用
+   */
+  static hasDevice(keyList = ['videoinput', 'audioinput']) {
+    return navigator.mediaDevices.enumerateDevices().then((devices) => {
+      const resList = keyList.map((e) => false)
+      keyList.forEach((key, index) => {
+        const microphones = devices.filter(
+          (device) => device.kind === 'audioinput'
+        )
+        if (microphones.length > 0) {
+          console.log('找到麦克风设备', microphones)
+          resList[index] = true
+        } else {
+          console.log('未找到麦克风设备')
+          resList[index] = false
+        }
+      })
+
+      return resList
+    })
+  }
+
   /**
    * 获取用户有无视频和音频录制权限
    */
@@ -86,48 +160,37 @@ export default class MediaRecording {
    * @returns {boolean} return.completeRecordingStatus - 录制状态,true为完成
    */
   startMediaRecorder(params) {
-    let startMediaRecorderParams = {
+    this.startMediaRecorderParams = {
       interval: 5000,
       fileName: '',
       recorderMimeType: 'video/mp4',
       onMonitorRecording: null,
       ...params,
     }
-    if (typeof onMonitorRecording !== 'function')
+    if (typeof this.startMediaRecorderParams.onMonitorRecording !== 'function')
       throw Error('必须传入录制视频回调函数!!')
-    startMediaRecorderParams.fileName =
-      startMediaRecorderParams.fileName ||
+    this.startMediaRecorderParams.fileName =
+      this.startMediaRecorderParams.fileName ||
       `${createMd5Id()}${moment().format('YYYYMMDD_HHmmss')}_`
-    let mimeTypeSuffix =
-      startMediaRecorderParams.recorderMimeType.match(/[^/]+$/)[0]
-    let blobCount = 0
-    console.log('startMediaRecorderParams', startMediaRecorderParams)
+    if (this.mediaRecorder) {
+      ElMessage.warning('录制中！')
+      return
+    }
+    this.startMediaRecorderParams.mimeTypeSuffix =
+      this.startMediaRecorderParams.recorderMimeType.match(/[^/]+?(?=;|$)/)[0]
+    this.startMediaRecorderParams.prefix =
+      this.startMediaRecorderParams.recorderMimeType.split('/')[0]
+    this.startMediaRecorderParams.blobCount = 0
     this.mediaRecorder = RecordRTC(this.stream, {
-      type: 'video',
-      mimeType: startMediaRecorderParams.recorderMimeType,
-      timeSlice: startMediaRecorderParams.interval,
-      //该回调函数必须和上面的timeSlice分片时间配合使用
-      ondataavailable: (blob) => {
-        // blob为每一秒的视频片段
-        blobCount++
-        let everyFileName = `${startMediaRecorderParams.fileName}${blobCount
-          .toString()
-          .padStart(4, '0')}.${mimeTypeSuffix}`
-        // 处理录制得到的数据
-        const recordedFile = new File([blob], everyFileName, {
-          type: startMediaRecorderParams.recorderMimeType,
-        })
-        startMediaRecorderParams.onMonitorRecording &&
-          startMediaRecorderParams.onMonitorRecording({
-            file: recordedFile,
-            fileName: startMediaRecorderParams.fileName,
-            completeRecordingStatus:
-              this.mediaRecorder?.getState() == 'stopped',
-          })
-      },
-      bitsPerSecond: 128000,
+      type: this.startMediaRecorderParams.prefix,
+      mimeType: `${this.startMediaRecorderParams.recorderMimeType}`,
+      bitsPerSecond: 5000000,
     })
     this.mediaRecorder?.startRecording()
+    setTimeout(
+      this.completeRecordingCallback,
+      this.startMediaRecorderParams.interval
+    )
     this.setRecordingTime()
   }
   // /**
@@ -148,8 +211,51 @@ export default class MediaRecording {
    * 完成录制
    */
   completeRecording() {
-    this.mediaRecorder.stopRecording()
+    // this.mediaRecorder.stopRecording()
     this.wipeOffRecordingTime()
+    this.completeRecordingCallback().then(() => {
+      this.mediaRecorder = null
+    })
+  }
+  /**
+   * 完成录制回调
+   */
+  completeRecordingCallback = () => {
+    return new Promise((resolve, reject) => {
+      this.mediaRecorder?.stopRecording(() => {
+        this.startMediaRecorderParams.blobCount++
+        let blobget = this.mediaRecorder.getBlob()
+        let blob = new Blob([blobget], {
+          type: `${this.startMediaRecorderParams.prefix}/${this.startMediaRecorderParams.mimeTypeSuffix}`,
+        })
+        let everyFileName = `${
+          this.startMediaRecorderParams.fileName
+        }${this.startMediaRecorderParams.blobCount
+          .toString()
+          .padStart(4, '0')}.${this.startMediaRecorderParams.mimeTypeSuffix}`
+        // 处理录制得到的数据
+        const recordedFile = new File([blob], everyFileName, {
+          type: this.startMediaRecorderParams.recorderMimeType,
+        })
+        this.startMediaRecorderParams.onMonitorRecording &&
+          this.startMediaRecorderParams.onMonitorRecording({
+            file: recordedFile,
+            fileName: this.startMediaRecorderParams.fileName,
+            completeRecordingStatus: this.recordingTimerIntervalId
+              ? false
+              : true,
+          })
+        if (this.recordingTimerIntervalId) {
+          this.mediaRecorder?.startRecording()
+          setTimeout(
+            this.completeRecordingCallback,
+            this.startMediaRecorderParams.interval
+          )
+        } else {
+          resolve()
+        }
+      }) // 停止录制
+    })
   }
   /**
    * 下载文件
@@ -239,5 +345,6 @@ export default class MediaRecording {
       // oldParentDom.appendChild(this.videoDom)
     }
     clearInterval(this.recordingTimerIntervalId)
+    this.recordingTimerIntervalId = null
   }
 }
