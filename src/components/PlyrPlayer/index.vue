@@ -1,6 +1,12 @@
 <template>
   <vue-plyr :options="props.options">
-    <video ref="plyrVideo" controls crossorigin playsinline data-poster="poster.jpg">
+    <video
+      ref="plyrVideo"
+      controls
+      crossorigin
+      playsinline
+      data-poster="poster.jpg"
+    >
       <source />
     </video>
   </vue-plyr>

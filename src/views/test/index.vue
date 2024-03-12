@@ -22,7 +22,8 @@
     >
     <!-- <size-select class="navbar-item" /> -->
     <el-button type="primary" @click="openDialog">测试弹窗</el-button>
-    <editor v-model="value" style="height: 600px" />
+    <!-- <editor v-model="value" style="height: 600px" /> -->
+    <MdEditorV3 class="mb4" v-model="mdEditorV3Value" style="height: 600px" />
     <!-- <RightPanel v-if="showSettings">
       <settings />
     </RightPanel> -->
@@ -34,6 +35,7 @@ import userStore from '@/store/modules/user'
 import settingsStore from '@/store/modules/settings'
 // import { Settings } from '@/Layout/components/index'
 import Editor from '@/components/WangEditor/index.vue'
+import MdEditorV3 from '@/components/MdEditorV3/index.vue'
 import RightPanel from '@/components/RightPanel/index.vue'
 import TestDialogs from './dialogs/TestDialogs.vue'
 import TestDialogs1 from './dialogs/TestDialogs1.vue'
@@ -52,6 +54,7 @@ const doLogIn = () => {
   userStore.login({ loginName: 'admin', password: 'mima334' }).then(() => {})
 }
 const value = ref('操')
+const mdEditorV3Value = ref('# Hello Editor')
 const showSettings = computed(() => settingsStore.showSettings)
 </script>
 <style scoped lang="scss">

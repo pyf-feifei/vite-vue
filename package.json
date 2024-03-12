@@ -21,6 +21,7 @@
     "jsencrypt": "^3.3.2",
     "json-bigint": "^1.0.0",
     "lodash": "^4.17.21",
+    "md-editor-v3": "^4.12.1",
     "nprogress": "^0.2.0",
     "path-browserify": "^1.0.1",
     "path-to-regexp": "^6.2.1",
