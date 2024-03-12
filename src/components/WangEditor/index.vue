@@ -21,7 +21,9 @@
 
 <script setup>
 import { Editor, Toolbar } from '@wangeditor/editor-for-vue'
-import MdPlugin from '@wangeditor/plugin-md' // 引入Markdown插件
+import { Boot } from '@wangeditor/editor'
+// 引入markdown语法
+import markdownModule from '@wangeditor/plugin-md'
 
 const props = defineProps({
   modelValue: {
@@ -31,8 +33,9 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
-
 const defaultHtml = useVModel(props, 'modelValue', emit)
+
+Boot.registerModule(markdownModule)
 
 const editorRef = shallowRef() // 编辑器实例，必须用 shallowRef
 const mode = ref('default') // 编辑器模式
