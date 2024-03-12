@@ -122,7 +122,7 @@ export default class MediaRecording {
             file: recordedFile,
             fileName: startMediaRecorderParams.fileName,
             completeRecordingStatus:
-              this.mediaRecorder?.getState() == 'inactive',
+              this.mediaRecorder?.getState() == 'stopped',
           })
       },
       bitsPerSecond: 128000,
