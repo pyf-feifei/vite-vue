@@ -29,4 +29,12 @@ html.dark {
   // // wang-editor modal
   --w-e-modal-button-bg-color: var(--el-button-bg-color);
   --w-e-modal-button-border-color: var(--el-color-info-light-3);
+
+  //md-editor-v3
+  .md-editor {
+    --md-color: var(--el-text-color-regulary);
+    --md-hover-color: var(--el-color-primary);
+    --md-bk-color: var(--el-bg-color-overlay);
+  }
+  //
 }
