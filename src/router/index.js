@@ -95,6 +95,25 @@ export const constantRoutes = [
     ],
   },
   {
+    path: '/iframe',
+    name: '/iframe',
+    component: Layout,
+    children: [
+      {
+        path: 'iframe',
+        component: () => import('@/views/iframe/index.vue'),
+        name: 'iframe',
+        meta: {
+          title: 'iframe',
+          icon: 'homepage',
+          affix: true,
+          keepAlive: true,
+          alwaysShow: false,
+        },
+      },
+    ],
+  },
+  {
     path: '/test/test',
     name: 'testtest',
     component: () => import('@/views/test/index.vue'),

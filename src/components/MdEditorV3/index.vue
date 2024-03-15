@@ -51,4 +51,8 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 const defaultText = useVModel(props, 'modelValue', emit)
 </script>
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+:deep(.md-editor-preview-wrapper) {
+  border-left: 3px solid var(--md-border-color);
+}
+</style>
