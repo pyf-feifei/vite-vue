@@ -1,12 +1,6 @@
 <template>
-  <vue-plyr :options="props.options">
-    <video
-      ref="plyrVideo"
-      controls
-      crossorigin
-      playsinline
-      data-poster="poster.jpg"
-    >
+  <vue-plyr :options="vuePlyrOptions">
+    <video ref="plyrVideo" v-bind="videoOptions">
       <source />
     </video>
   </vue-plyr>
@@ -14,6 +8,7 @@
 
 <script setup>
 import Hls from 'hls.js'
+import { getToken } from '@/utils/auth'
 const { proxy } = getCurrentInstance()
 
 const props = defineProps({
@@ -21,36 +16,74 @@ const props = defineProps({
     type: String,
     default: '',
   },
-  options: {
+  //vue-plyr的官方配置
+  vuePlyrOptions: {
     type: Object,
     default(context) {
       return {
         i18n: {
           speed: '速度',
           normal: '正常',
-          ...context?.options,
         },
+        controls: [
+          'play-large',
+          'play',
+          'progress',
+          'current-time',
+          'mute',
+          'volume',
+          'captions',
+          'settings',
+          'pip',
+          'airplay',
+          'fullscreen',
+        ],
+        ...context?.vuePlyrOptions,
+      }
+    },
+  },
+  //video 原生配置
+  videoOptions: {
+    type: [Object],
+    default(context) {
+      return {
+        playsinline: true,
+        crossorigin: true,
+        'data-poster': '/static/common/test.jpg',
+        ...context?.videoOptions,
       }
     },
   },
 })
 
+const state = reactive({
+  height: 0,
+  width: 0,
+})
 const plyrVideo = ref(null)
+//创建Hls对象
+const hls = new Hls({
+  xhrSetup: function (xhr, url) {
+    xhr.setRequestHeader('Authorization', getToken())
+  },
+})
 // 使用watch监听特定的prop
 watch(
   () => props.src,
   (newValue, oldValue) => {
-    if (Hls.isSupported()) {
-      if (!props.src) return
-      const videoElement = plyrVideo.value
-      const hls = new Hls()
-      hls.loadSource(props.src)
-      hls.attachMedia(videoElement)
-      props.options.autoplay &&
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          videoElement.play()
-        })
-    }
+    proxy.$nextTick(() => {
+      //设置播放器宽高
+      if (Hls.isSupported()) {
+        if (!props.src) return
+        const videoElement = plyrVideo.value
+        hls.loadSource(props.src)
+        hls.attachMedia(videoElement)
+        props.vuePlyrOptions.autoplay &&
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            videoElement.play()
+          })
+      }
+    })
   },
   {
     immediate: true,
