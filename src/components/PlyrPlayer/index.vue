@@ -8,7 +8,6 @@
 
 <script setup>
 import Hls from 'hls.js'
-import { getToken } from '@/utils/auth'
 const { proxy } = getCurrentInstance()
 
 const props = defineProps({
@@ -64,7 +63,7 @@ const plyrVideo = ref(null)
 //创建Hls对象
 const hls = new Hls({
   xhrSetup: function (xhr, url) {
-    xhr.setRequestHeader('Authorization', getToken())
+    xhr.setRequestHeader('Authorization', '') //token配置
   },
 })
 // 使用watch监听特定的prop
