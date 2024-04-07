@@ -151,6 +151,13 @@ const useSettingsStore = defineStore('setting', {
           '--sub-menu-background': '#304156',
           '--sub-menu-active-text': '#4c5fe8',
           '--sub-menu-hover': '#4c5fe8',
+          //主题修改后的其他变异颜色修改
+          '--el-color-primary-light-3': ' #E03F34',
+          '--el-color-primary-light-5': '#E46B62',
+          '--el-color-primary-light-7': '#E7978F',
+          '--el-color-primary-light-8': ' #E9A29C',
+          '--el-color-primary-light-9': '#EBB8B5',
+          '--el-color-primary-dark-2': '#9A0210',
         },
       ]),
     }
