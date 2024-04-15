@@ -1,3 +1,5 @@
+//录制方法二：可以用RecordRTC的官方提供的分片方法，但是有个问题要解决(在除了第一个分片外的其他分片都加上一个头其他就能正常用了)
+
 import { ref } from 'vue'
 import moment from 'moment'
 import { createMd5Id } from '@/core/js/$'
