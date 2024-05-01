@@ -21,8 +21,9 @@ import { setupVuePlyr } from '@/utils/VuePlyr'
 import { createPinia } from 'pinia'
 const pinia = createPinia()
 const app = createApp(App)
+app.use(router)
 setupDirective(app) //使用自定义Directive
 setupDialog(app) //使用自定义dialog
 setupElementPluseIconsGlobal(app) //全局使用ElementPluseIcon
 setupVuePlyr(app) //使用VuePlyr播放器
-app.use(router).use(ElementPlus).use(pinia).mount('#app')
+app.use(ElementPlus).use(pinia).mount('#app')
