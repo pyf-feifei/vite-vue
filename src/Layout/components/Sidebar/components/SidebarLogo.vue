@@ -1,9 +1,15 @@
 <template>
-  <div class="logo-container" :class="{
-    backgroundColorTransparent: settingsStore.backgroundColorTransparent,
-  }">
+  <div
+    class="logo-container"
+    :class="{
+      backgroundColorTransparent: settingsStore.backgroundColorTransparent,
+    }"
+  >
     <transition enter-active-class="animate__animated animate__fadeInLeft">
-      <router-link class="wh-full flex-center" to="/">
+      <router-link v-if="collapse" class="wh-full flex-center" to="/">
+        <img v-if="settingsStore.sidebarLogo" :src="logo" class="logo-image" />
+      </router-link>
+      <router-link v-else class="wh-full flex-center" to="/">
         <img v-if="settingsStore.sidebarLogo" :src="logo" class="logo-image" />
         <span class="logo-title"> {{ settingsStore.title }}</span>
       </router-link>
@@ -15,6 +21,10 @@
 import settingsStore from '@/store/modules/settings'
 
 defineProps({
+  collapse: {
+    type: Boolean,
+    required: true,
+  },
 })
 
 const logo = ref(new URL(`../../../../assets/vue.svg`, import.meta.url).href)

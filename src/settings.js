@@ -1,7 +1,7 @@
 const defaultSettings = {
   title: '数派企业大模型',
   showSettings: true, //显示设置
-  layout: 'top',
+  layout: 'left',
   theme: 'light', //主题；亮、黑夜
   sidebarLogo: true, //显示logo
   size: 'default',
