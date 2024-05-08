@@ -136,7 +136,6 @@ const useTagsViewStore = defineStore('tagsView', {
      * 添加已访问视图到已访问视图列表中
      */
     addVisitedView(view) {
-      console.log('this.visitedViews', this.visitedViews)
       // 如果已经存在于已访问的视图列表中，则不再添加
       if (this.visitedViews.some((v) => v.path === view.path)) {
         return

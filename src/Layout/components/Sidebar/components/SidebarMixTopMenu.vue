@@ -77,5 +77,6 @@ onMounted(() => {
   mixTopMenus.value = permissionStore.routes.filter(
     (item) => !item.meta || !item.meta.hidden
   )
+  console.log('mixTopMenus', mixTopMenus)
 })
 </script>

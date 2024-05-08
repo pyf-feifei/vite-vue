@@ -21,10 +21,10 @@
           :base-path="activeTopMenuPath"
         ></SidebarMenu>
         <div class="sidebar-toggle">
-          <!-- <hamburger
+          <hamburger
             :is-active="appStore.sidebar.opened"
             @toggle-click="toggleSidebar"
-          /> -->
+          />
         </div>
       </div>
 
@@ -41,6 +41,7 @@
 
     <!-- 左侧布局|| 顶部布局 -->
     <div
+      v-else
       :class="{
         hasTagsView: showTagsView,
         backgroundColorTransparent: settingsStore.backgroundColorTransparent,
@@ -73,6 +74,18 @@ const layout = computed(() => settingsStore.layout)
 const activeTopMenuPath = computed(() => appStore.activeTopMenuPath) // 顶部菜单激活path
 const mixLeftMenus = computed(() => permissionStore.mixLeftMenus) // 混合布局左侧菜单
 
+watch(
+  //设置责左边栏
+  () => activeTopMenuPath.value,
+  (newVal) => {
+    permissionStore.setMixLeftMenus(newVal)
+  },
+  {
+    deep: true,
+    immediate: true,
+  }
+)
+
 const classObj = computed(() => ({
   hideSidebar: !appStore.sidebar.opened,
   openSidebar: appStore.sidebar.opened,
@@ -102,6 +115,9 @@ watchEffect(() => {
 
 function handleOutsideClick() {
   appStore.closeSideBar()
+}
+function toggleSidebar() {
+  appStore.toggleSidebar()
 }
 </script>
 

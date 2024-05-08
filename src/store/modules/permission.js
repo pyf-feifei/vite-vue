@@ -26,7 +26,7 @@ const usePermissionStore = defineStore('permission', {
     generateRoutes() {
       return new Promise((resolve, reject) => {
         // 接口获取所有路由
-        setRoutes([])
+        this.setRoutes([])
         resolve([])
       })
     },
@@ -41,4 +41,6 @@ const usePermissionStore = defineStore('permission', {
     },
   },
 })
+const permissionStore = usePermissionStore()
+permissionStore.generateRoutes()
 export default usePermissionStore()

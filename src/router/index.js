@@ -79,6 +79,9 @@ export const constantRoutes = [
     path: '/test',
     name: '/test',
     component: Layout,
+    meta: {
+      title: 'test',
+    },
     children: [
       {
         path: 'testhome',
@@ -98,6 +101,9 @@ export const constantRoutes = [
     path: '/iframe',
     name: '/iframe',
     component: Layout,
+    meta: {
+      title: 'iframe',
+    },
     children: [
       {
         path: 'iframe',
