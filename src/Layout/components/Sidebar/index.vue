@@ -4,7 +4,7 @@
     <template v-if="layout == 'mix'">
       <div class="flex w-full">
         <SidebarLogo v-if="sidebarLogo" :collapse="!appStore.sidebar.opened" />
-        <!-- <SidebarMixTopMenu class="flex-1" /> -->
+        <SidebarMixTopMenu class="flex-1" />
         <NavbarRight />
       </div>
     </template>

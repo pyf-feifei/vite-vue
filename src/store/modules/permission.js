@@ -5,6 +5,7 @@ const usePermissionStore = defineStore('permission', {
   state: () => {
     return {
       routes: reactive([]),
+      mixLeftMenus: reactive([]),
     }
   },
   getters: {},
@@ -28,6 +29,15 @@ const usePermissionStore = defineStore('permission', {
         setRoutes([])
         resolve([])
       })
+    },
+    /**
+     * 获取与激活的顶部菜单项相关的混合模式左侧菜单集合
+     */
+    setMixLeftMenus(topMenuPath) {
+      const matchedItem = this.routes.find((item) => item.path === topMenuPath)
+      if (matchedItem && matchedItem.children) {
+        this.mixLeftMenus = matchedItem.children
+      }
     },
   },
 })

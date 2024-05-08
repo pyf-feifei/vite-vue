@@ -14,6 +14,30 @@
     />
 
     <!-- 混合布局 -->
+    <div v-if="layout === 'mix'" class="mix-container">
+      <div class="mix-container__left">
+        <SidebarMenu
+          :menu-list="mixLeftMenus"
+          :base-path="activeTopMenuPath"
+        ></SidebarMenu>
+        <div class="sidebar-toggle">
+          <!-- <hamburger
+            :is-active="appStore.sidebar.opened"
+            @toggle-click="toggleSidebar"
+          /> -->
+        </div>
+      </div>
+
+      <div :class="{ hasTagsView: showTagsView }" class="main-container">
+        <div :class="{ 'fixed-header': fixedHeader }">
+          <TagsView v-if="showTagsView" />
+        </div>
+        <AppMain />
+        <RightPanel v-if="defaultSettings.showSettings">
+          <Settings />
+        </RightPanel>
+      </div>
+    </div>
 
     <!-- 左侧布局|| 顶部布局 -->
     <div
@@ -41,11 +65,13 @@ import { useWindowSize } from '@vueuse/core'
 import appStore from '@/store/modules/app'
 import settingsStore from '@/store/modules/settings'
 import defaultSettings from '@/settings'
+import permissionStore from '@/store/modules/permission'
 
 const fixedHeader = computed(() => settingsStore.fixedHeader)
 const showTagsView = computed(() => settingsStore.tagsView)
-console.log('showTagsView', showTagsView)
 const layout = computed(() => settingsStore.layout)
+const activeTopMenuPath = computed(() => appStore.activeTopMenuPath) // 顶部菜单激活path
+const mixLeftMenus = computed(() => permissionStore.mixLeftMenus) // 混合布局左侧菜单
 
 const classObj = computed(() => ({
   hideSidebar: !appStore.sidebar.opened,

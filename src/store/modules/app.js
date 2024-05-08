@@ -20,7 +20,7 @@ const useAppStore = defineStore('app', {
       sidebarStatus: sidebarStatus,
 
       sidebar: reactive({
-        opened: sidebarStatus !== "closed",
+        opened: sidebarStatus !== 'closed',
         withoutAnimation: false,
       }),
       activeTopMenuPath: useStorage('activeTopMenuPath', ''),
@@ -57,8 +57,11 @@ const useAppStore = defineStore('app', {
     changeSize(val) {
       this.size = val
     },
+    /**
+     * 混合模式顶部切换
+     */
     activeTopMenu(val) {
-      activeTopMenuPath.value = val
+      this.activeTopMenuPath = val
     },
   },
 })
