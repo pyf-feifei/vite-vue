@@ -56,7 +56,6 @@ export const constantRoutes = [
         meta: {
           title: 'home',
           icon: 'homepage',
-          affix: true,
           keepAlive: true,
           alwaysShow: false,
         },
@@ -68,7 +67,6 @@ export const constantRoutes = [
         meta: {
           title: 'test',
           icon: 'homepage',
-          affix: true,
           keepAlive: true,
           alwaysShow: false,
         },
@@ -90,7 +88,6 @@ export const constantRoutes = [
         meta: {
           title: 'test',
           icon: 'homepage',
-          affix: true,
           keepAlive: true,
           alwaysShow: false,
         },
@@ -112,7 +109,6 @@ export const constantRoutes = [
         meta: {
           title: 'iframe',
           icon: 'homepage',
-          affix: true,
           keepAlive: true,
           alwaysShow: false,
         },
