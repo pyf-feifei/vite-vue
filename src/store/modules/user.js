@@ -36,7 +36,7 @@ const useUserStore = defineStore('user', {
     },
     reset() {
       this.token = ''
-      this.userInfo = null
+      this.userInfo = ''
     },
     setToken(data) {
       this.token = data
