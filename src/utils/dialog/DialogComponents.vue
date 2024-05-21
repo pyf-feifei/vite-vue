@@ -1,7 +1,10 @@
 <template>
   <teleport to="body">
     <transition>
-      <div v-if="visible" class="dialog fixed top-0 left-0 right-0 bottom-0">
+      <div
+        v-if="visible"
+        class="dialog fixed top-0 left-0 right-0 bottom-0 z-1000"
+      >
         <!-- 动态组件渲染 -->
         <div
           class="dialog-in"
@@ -18,7 +21,9 @@
               +
             </div>
           </header>
-          <component :is="contentComponent" />
+          <template v-if="contentComponent">
+            <component :is="contentComponent" v-bind="componentProps" />
+          </template>
         </div>
       </div>
     </transition>
@@ -41,12 +46,16 @@ export default {
       type: String,
       default: '800px',
     },
+    componentProps: {
+      type: Object,
+      default: null,
+    },
   },
   setup(props) {
     const visible = ref(false)
     const contentComponent = ref(null)
 
-    function show(component) {
+    function show(component, componentPropsOut) {
       contentComponent.value = component
       visible.value = true
     }
@@ -73,7 +82,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 .v-enter-active,
 .v-leave-active {
   transition: opacity 0.5s ease;
@@ -116,7 +125,7 @@ export default {
         transform: rotate(45deg);
         position: absolute;
         color: #909399;
-        top: 0;
+        top: 10px;
         right: 16px;
       }
     }

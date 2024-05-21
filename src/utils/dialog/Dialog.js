@@ -7,6 +7,7 @@ class Dialog {
   }
 
   show(component, props = {}) {
+    console.log('props', props)
     return new Promise((resolve, reject) => {
       const dialogContainer = document.createElement('div')
       document.body.appendChild(dialogContainer) // 将新弹窗挂载到 body
@@ -20,6 +21,7 @@ class Dialog {
           width: '800px',
         },
         ...props,
+        componentProps: props,
       })
       dialogApp.config.globalProperties.$dialog = this
       const dialogInstance = dialogApp.mount(dialogContainer)
