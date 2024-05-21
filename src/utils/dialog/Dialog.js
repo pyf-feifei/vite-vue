@@ -24,6 +24,11 @@ class Dialog {
         componentProps: props,
       })
       dialogApp.config.globalProperties.$dialog = this
+      dialogApp.config.globalProperties = {
+        ...dialogApp.config.globalProperties,
+        ...this.app.config.globalProperties,
+        ...{ $dialog: this },
+      }
       const dialogInstance = dialogApp.mount(dialogContainer)
       //添加关闭弹窗方法
       const mixin = {
@@ -55,5 +60,6 @@ const dialog = new Dialog()
 // 全局注册 directive 方法
 export function setupDialog(app) {
   app.config.globalProperties.$dialog = dialog
+  dialog.app = app // 添加属性
 }
 export default dialog
