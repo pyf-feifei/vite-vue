@@ -3,6 +3,7 @@
     <transition>
       <div
         v-if="visible"
+        :style="style.dialogStyle"
         class="dialog fixed top-0 left-0 right-0 bottom-0 z-1000"
       >
         <!-- 动态组件渲染 -->
@@ -10,11 +11,13 @@
           class="dialog-in"
           :style="{
             width: props.width,
+            ...style.dialogInStyle,
           }"
         >
-          <header class="dialog-in-title">
+          <header :style="style.dialogInTitleStyle" class="dialog-in-title">
             <span>{{ props.title }}</span>
             <div
+              :style="style.dialogInTitleIconStyle"
               class="dialog-in-title-icon cursor-pointer"
               @click="closeDialog"
             >
@@ -45,6 +48,18 @@ export default {
     width: {
       type: String,
       default: '800px',
+    },
+    style: {
+      type: Object,
+      default(context) {
+        return {
+          dialogStyle: null,
+          dialogInStyle: null,
+          dialogInTitleStyle: null,
+          dialogInTitleIconStyle: null,
+          ...context.dialogsStyle,
+        }
+      },
     },
     componentProps: {
       type: Object,
