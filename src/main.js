@@ -15,6 +15,7 @@ import '@/styles/index.scss'
 
 import { setupDirective } from '@/directive'
 import { setupDialog } from '@/utils/dialog/Dialog'
+import { setupDrawer } from '@/utils/Drawer/index'
 import { setupElementPluseIconsGlobal } from '@/utils/elementPluseIconsGlobal'
 import { setupVuePlyr } from '@/utils/VuePlyr'
 
@@ -24,6 +25,7 @@ const app = createApp(App)
 app.use(router)
 setupDirective(app) //使用自定义Directive
 setupDialog(app) //使用自定义dialog
+setupDrawer(app) //使用自定义Drawer
 setupElementPluseIconsGlobal(app) //全局使用ElementPluseIcon
 setupVuePlyr(app) //使用VuePlyr播放器
 app.use(ElementPlus).use(pinia).mount('#app')
