@@ -46,7 +46,7 @@ const open = () => {
 }
 const openDialog = () => {
   console.log('proxy', proxy.$dialog)
-  proxy.$dialog.show(TestDialogs).then((res) => {
+  proxy.$drawer.show(TestDialogs).then((res) => {
     console.log('res', res)
   })
 }

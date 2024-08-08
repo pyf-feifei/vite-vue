@@ -14,7 +14,7 @@ import '@/styles/dark.scss'
 import '@/styles/index.scss'
 
 import { setupDirective } from '@/directive'
-import { setupDialog } from '@/utils/dialog/Dialog'
+import { setupDialog } from '@/utils/Dialog/index.js'
 import { setupDrawer } from '@/utils/Drawer/index'
 import { setupElementPluseIconsGlobal } from '@/utils/elementPluseIconsGlobal'
 import { setupVuePlyr } from '@/utils/VuePlyr'

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import dialog from '@/utils/dialog/Dialog'
+import dialog from '@/utils/Dialog/index.js'
 import userStore from '@/store/modules/user'
 import JSONbig from 'json-bigint'
 const JSONbigString = new JSONbig({ storeAsString: true })
