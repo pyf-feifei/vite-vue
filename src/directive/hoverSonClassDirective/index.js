@@ -1,17 +1,20 @@
 /**
- * 通过classs设置hover事件
+ * 通过class设置hover事件
  * 使用：v-hoverSonClassDirective:元素类名="handleHover"
  */
 export const hoverSonClassDirective = {
   beforeMount(el, binding) {
     const updateHoverDirective = () => {
       let isHoveringTarget = false
+      let currentHoveredElement = null
 
       const checkForTarget = (event) => {
         const targetClass = binding.arg || 'quotePoint' // 默认类名为 'quotePoint'
         const targetElements = el.querySelectorAll(`.${targetClass}`)
 
         let isInside = false
+        let hoveredElement = null
+
         targetElements.forEach((targetElement) => {
           const rect = targetElement.getBoundingClientRect()
           if (
@@ -21,12 +24,17 @@ export const hoverSonClassDirective = {
             event.clientY <= rect.bottom
           ) {
             isInside = true
+            hoveredElement = targetElement
           }
         })
 
-        if (isInside !== isHoveringTarget) {
+        if (
+          isInside !== isHoveringTarget ||
+          hoveredElement !== currentHoveredElement
+        ) {
           isHoveringTarget = isInside
-          binding.value(isHoveringTarget, event)
+          currentHoveredElement = hoveredElement
+          binding.value(isHoveringTarget, event, currentHoveredElement)
         }
       }
 
@@ -40,7 +48,8 @@ export const hoverSonClassDirective = {
         el.removeEventListener('mousemove', checkForTarget)
         if (isHoveringTarget) {
           isHoveringTarget = false
-          binding.value(false)
+          currentHoveredElement = null
+          binding.value(false, null, null)
         }
       }
 
