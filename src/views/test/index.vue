@@ -22,6 +22,13 @@
     >
     <!-- <size-select class="navbar-item" /> -->
     <el-button type="primary" @click="openDialog">测试弹窗</el-button>
+    <el-button
+      type="primary"
+      ref="openPopoverRef"
+      v-hoverDirective="handleHoverDirective"
+      @click="openPopover"
+      >Popover测试</el-button
+    >
     <!-- <editor v-model="value" style="height: 600px" /> -->
     <MdEditorV3 class="mb4" v-model="mdEditorV3Value" style="height: 600px" />
     <!-- <RightPanel v-if="showSettings">
@@ -41,6 +48,7 @@ import TestDialogs from './dialogs/TestDialogs.vue'
 import TestDialogs1 from './dialogs/TestDialogs1.vue'
 const { proxy } = getCurrentInstance()
 let testMsg = ref('1111111')
+let openPopoverRef = ref()
 const open = () => {
   ElMessage('this is a message.')
 }
@@ -49,6 +57,37 @@ const openDialog = () => {
   proxy.$drawer.show(TestDialogs).then((res) => {
     console.log('res', res)
   })
+}
+const openPopover = () => {
+  proxy.$popover
+    .show(TestDialogs, {
+      elPopoverOptions: {
+        slots: {
+          reference: openPopoverRef.value,
+        },
+      },
+    })
+    .then((res) => {
+      console.log('res', res)
+      elPopoverOptions.slots.reference
+    })
+}
+const handleHoverDirective = (hover, events) => {
+  console.log('hover', hover)
+  if (hover) {
+    proxy.$popover
+      .show(TestDialogs, {
+        elPopoverOptions: {
+          slots: {
+            reference: openPopoverRef.value,
+          },
+        },
+      })
+      .then((res) => {
+        console.log('res', res)
+        elPopoverOptions.slots.reference
+      })
+  }
 }
 const doLogIn = () => {
   userStore.login({ loginName: 'admin', password: 'mima334' }).then(() => {})
