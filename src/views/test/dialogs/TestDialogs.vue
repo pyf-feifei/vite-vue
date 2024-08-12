@@ -16,13 +16,13 @@ const openDialog = () => {
   proxy.$dialog.show(TestDialogs1)
 }
 const openCancle = () => {
-  // this.$dialogClose()
+  // this.$drawerClose()
 
-  proxy.$dialogClose(false, 1111)
+  proxy.$drawerClose(false, 1111)
 }
 const openSave = () => {
   console.log('proxy1', proxy)
-  proxy.$dialogClose(true, 2222)
+  proxy.$drawerClose(true, 2222)
 }
 </script>
 <style scoped lang="scss">

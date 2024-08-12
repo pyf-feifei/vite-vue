@@ -6,20 +6,23 @@
     @open="elDrawerOptions.events?.open"
     @opened="
       () => {
-        if (!elDrawerOptions.events?.opened) return
-        elDrawerOptions.events?.opened()
+        if (elDrawerOptions.events?.opened) {
+          elDrawerOptions.events?.opened()
+        }
       }
     "
     @close="
       () => {
-        if (!elDrawerOptions.events.close) return
-        elDrawerOptions.events?.close()
+        if (elDrawerOptions.events.close) {
+          elDrawerOptions.events?.close()
+        }
       }
     "
     @closed="
       () => {
-        if (!elDrawerOptions.events.closed) return
-        elDrawerOptions.events?.closed()
+        if (elDrawerOptions.events.closed) {
+          elDrawerOptions.events?.closed()
+        }
         onClose()
       }
     "
@@ -31,7 +34,11 @@
     </template>
 
     <template v-if="contentComponent">
-      <component v-clickOutDirective="clickOutDirective" :is="contentComponent" v-bind="componentProps" />
+      <component
+        v-clickOutDirective="clickOutDirective"
+        :is="contentComponent"
+        v-bind="componentProps"
+      />
     </template>
 
     <template v-if="elDrawerOptions.slots?.footer" #footer>
@@ -127,7 +134,8 @@ export default {
       await nextTick()
       // 获取 el-drawer
       let elementDom = document.getElementById(elDrawerId.value)
-      let elDrawerBodyDom = elementDom.getElementsByClassName('el-drawer__body')?.[0]
+      let elDrawerBodyDom =
+        elementDom.getElementsByClassName('el-drawer__body')?.[0]
       elDrawerBodyDom && elDrawerBodyDom.classList.add('padding0') //设置样式
       if (!props.elDrawerOptions.attributes.modal) {
         //如果不要遮罩层设置可以点其他地方
@@ -146,7 +154,10 @@ export default {
      * @param {string} chars - 字符集（可选），默认为字母和数字
      * @returns {string} 生成的随机字符串
      */
-    function getRandomString(length, chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789') {
+    function getRandomString(
+      length,
+      chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+    ) {
       let result = ''
       for (let i = 0; i < length; i++) {
         result += chars.charAt(Math.floor(Math.random() * chars.length))
