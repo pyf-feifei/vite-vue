@@ -32,9 +32,12 @@ class Popover {
       }
     }
     //获取旧的position
-    targetElement.iniPositionOld =
-      window.getComputedStyle(targetElement).position
-    targetElement.style.position = 'relative'
+    const computedStyle = window.getComputedStyle(targetElement)
+    targetElement.iniPositionOld = computedStyle.position
+    const zIndex = computedStyle.getPropertyValue('z-index')
+    targetElement.iniZIndexOld = zIndex === 'auto' ? 0 : parseInt(zIndex, 10)
+    targetElement.style.zIndex = targetElement.iniZIndexOld + 1
+    // targetElement.style.position = 'relative'
     //新建popoverContainer 用于挂载vue
     const popoverContainer = document.createElement('div')
     let targetElementClassName = `dialog-container-${this.popovers.length + 1}`
@@ -70,6 +73,8 @@ class Popover {
           try {
             targetElement &&
               (targetElement.style.position = targetElement.iniPositionOld)
+            targetElement &&
+              (targetElement.style.zIndex = targetElement.iniZIndexOld)
             popoverContainer && popoverApp.unmount(popoverContainer) // 关闭时卸载组件
             popoverContainer && targetElement.removeChild(popoverContainer) // 移除容器
           } catch (error) {}
