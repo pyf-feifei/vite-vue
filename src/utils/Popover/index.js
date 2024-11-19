@@ -36,7 +36,7 @@ class Popover {
     targetElement.iniPositionOld = computedStyle.position
     const zIndex = computedStyle.getPropertyValue('z-index')
     targetElement.iniZIndexOld = zIndex === 'auto' ? 0 : parseInt(zIndex, 10)
-    targetElement.style.zIndex = targetElement.iniZIndexOld + 1
+    targetElement.style.zIndex = targetElement.iniZIndexOld - 1
     // targetElement.style.position = 'relative'
     //新建popoverContainer 用于挂载vue
     const popoverContainer = document.createElement('div')
