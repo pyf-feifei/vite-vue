@@ -20,8 +20,10 @@ export const useDraggableDirective = {
       }
       //console.log('进入', viewportWidth - elementWidth, viewportHeight - elementHeight)
       useDraggableOption.initialValue = {}
-      useDraggableOption.initialValue.x = viewportWidth - elementWidth - useDraggableOption?.position.right
-      useDraggableOption.initialValue.y = viewportHeight - elementHeight - useDraggableOption?.position.bottom
+      useDraggableOption.initialValue.x =
+        viewportWidth - elementWidth - useDraggableOption?.position.right
+      useDraggableOption.initialValue.y =
+        viewportHeight - elementHeight - useDraggableOption?.position.bottom
     }
     const useDraggableOptionIn = {
       initialValue: { x: 0, y: 0 },
@@ -83,7 +85,11 @@ export const useDraggableDirective = {
       // 检查是否是左键按下
       if (event.button === 0) {
         setOldXYData()
-        if (classList.some((item) => useDraggableOptionIn.unMoveClass.includes(item))) {
+        if (
+          classList.some((item) =>
+            useDraggableOptionIn.unMoveClass.includes(item)
+          )
+        ) {
           // 添加鼠标移动事件监听器
           el.addEventListener('mousemove', mousemoveEvent)
 
@@ -149,11 +155,17 @@ export const useDraggableDirective = {
     }
     // 监听 x 和 y 的变化，并更新元素的样式
     watch(x, (newX) => {
+      //改变y的时候需要改一下页面宽度和页面高度，因为有可能x,y会是其他的触发，而不单是这个
+      viewportWidth = window.innerWidth
+      viewportHeight = window.innerHeight
       // 限制 x 在视口边界内
       changeX(newX)
     })
     // 监听 x 和 y 的变化，并更新元素的样式
     watch(y, (newY) => {
+      //改变y的时候需要改一下页面宽度和页面高度，因为有可能x,y会是其他的触发，而不单是这个
+      viewportWidth = window.innerWidth
+      viewportHeight = window.innerHeight
       // 限制 y 在视口边界内
       changeY(newY)
     })
