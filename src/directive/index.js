@@ -2,6 +2,9 @@ import { testDirective } from './test'
 import { clickOutDirective } from './clickOut'
 import { hoverSonClassDirective } from './hoverSonClassDirective'
 import { hoverDirective } from './hoverDirective'
+import { vScrollDirective } from './vScrollDirective'
+import { useDraggableDirective } from './useDraggableDirective'
+import { resizeDirective } from './useDraggableDirective'
 
 // 全局注册 directive 方法
 export function setupDirective(app) {
@@ -10,4 +13,7 @@ export function setupDirective(app) {
   app.directive('clickOutDirective', clickOutDirective)
   app.directive('hoverSonClassDirective', hoverSonClassDirective)
   app.directive('hoverDirective', hoverDirective)
+  app.directive('vScrollDirective', vScrollDirective)
+  app.directive('useDraggableDirective', useDraggableDirective)
+  app.directive('resizeDirective', resizeDirective)
 }
