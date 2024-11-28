@@ -34,6 +34,7 @@
     <!-- <RightPanel v-if="showSettings">
       <settings />
     </RightPanel> -->
+    <div @contextmenu.prevent="showContextMenu">自定义右键菜单</div>
   </div>
 </template>
 
@@ -95,6 +96,24 @@ const doLogIn = () => {
 const value = ref('操')
 const mdEditorV3Value = ref('# Hello Editor')
 const showSettings = computed(() => settingsStore.showSettings)
+/**
+ * 自定义右键菜单
+ * @param event
+ */
+const showContextMenu = (event) => {
+  console.log('右键显示菜单')
+  event.preventDefault()
+  ContextMenu.show(
+    event,
+    TestDialogs,
+    {
+      area: '200px', // 打开的vue的宽度
+    },
+    {
+      // 传入任意vue组件的props对象
+    }
+  )
+}
 </script>
 <style scoped lang="scss">
 .test {
