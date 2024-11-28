@@ -1,3 +1,4 @@
+//自定义抽屉弹出
 import { createApp } from 'vue'
 import DrawerComponent from './components/Drawer.vue'
 import { ElMessage } from 'element-plus'
@@ -9,7 +10,8 @@ class Drawer {
   show(component, props = {}, drawerMountDom) {
     if (drawerMountDom) {
       if (drawerMountDom && drawerMountDom?.nodeType === 1) {
-        drawerMountDom.iniPositionOld = window.getComputedStyle(drawerMountDom).position
+        drawerMountDom.iniPositionOld =
+          window.getComputedStyle(drawerMountDom).position
         drawerMountDom.style.position = 'relative'
       } else {
         console.log('props', props, drawerMountDom)
@@ -26,7 +28,8 @@ class Drawer {
       const drawerApp = createApp(DrawerComponent, {
         onClose: () => {
           try {
-            drawerMountDom && (drawerMountDom.style.position = drawerMountDom.iniPositionOld)
+            drawerMountDom &&
+              (drawerMountDom.style.position = drawerMountDom.iniPositionOld)
             drawerContainer && drawerApp.unmount(drawerContainer) // 关闭时卸载组件
             drawerContainer && needToAppendDom.removeChild(drawerContainer) // 移除容器
           } catch (error) {}
@@ -41,7 +44,10 @@ class Drawer {
         ...this.app.config.globalProperties,
         ...{ $drawer: this },
       }
-      drawerApp._context.directives = { ...drawerApp._context.directives, ...this.app._context.directives }
+      drawerApp._context.directives = {
+        ...drawerApp._context.directives,
+        ...this.app._context.directives,
+      }
       const drawerInstance = drawerApp.mount(drawerContainer)
       //添加关闭弹窗方法
       const mixin = {
