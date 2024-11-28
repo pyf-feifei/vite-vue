@@ -1,4 +1,4 @@
-//鼠标位置弹窗
+//鼠标位置弹窗，自定义右键菜单
 import { createApp, h } from 'vue'
 import init from '@/core/js/init'
 
