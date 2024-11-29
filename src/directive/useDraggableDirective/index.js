@@ -155,17 +155,21 @@ export const useDraggableDirective = {
     }
     // 监听 x 和 y 的变化，并更新元素的样式
     watch(x, (newX) => {
-      //改变y的时候需要改一下页面宽度和页面高度，因为有可能x,y会是其他的触发，而不单是这个
-      viewportWidth = window.innerWidth
-      viewportHeight = window.innerHeight
+      //改变y的时候需要改一下页面宽度和页面高度,还有元素宽高存储，因为有可能x,y会是其他的触发，而不单是这个
+      // viewportWidth = window.innerWidth
+      // viewportHeight = window.innerHeight
+      elementWidth = el.offsetWidth
+      elementHeight = el.offsetHeight
       // 限制 x 在视口边界内
       changeX(newX)
     })
     // 监听 x 和 y 的变化，并更新元素的样式
     watch(y, (newY) => {
-      //改变y的时候需要改一下页面宽度和页面高度，因为有可能x,y会是其他的触发，而不单是这个
-      viewportWidth = window.innerWidth
-      viewportHeight = window.innerHeight
+      //改变y的时候需要改一下页面宽度和页面高度,还有元素宽高存储，因为有可能x,y会是其他的触发，而不单是这个
+      // viewportWidth = window.innerWidth
+      // viewportHeight = window.innerHeight
+      elementWidth = el.offsetWidth
+      elementHeight = el.offsetHeight
       // 限制 y 在视口边界内
       changeY(newY)
     })
