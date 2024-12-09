@@ -3,6 +3,8 @@
  */
 export const clickOutDirective = {
   beforeMount(el, binding) {
+    console.log('clickOutDirective', el)
+
     // 在元素上绑定一个事件监听器
     el.clickOutsideEvent = function (event) {
       // 判断点击事件是否发生在元素外部

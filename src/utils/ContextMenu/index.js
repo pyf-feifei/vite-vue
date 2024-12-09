@@ -1,6 +1,6 @@
 //鼠标位置弹窗，自定义右键菜单
 import { createApp, h } from 'vue'
-import init from '@/core/js/init'
+import init from '@/main/init.js'
 
 class ContextMenu {
   static instance = null

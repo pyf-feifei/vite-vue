@@ -1,12 +1,17 @@
 <template>
   <div class="tags-container">
-    <el-scrollbar class="scroll-container" :vertical="false">
+    <el-scrollbar
+      class="scroll-container"
+      :vertical="false"
+      @wheel.prevent="handleScroll"
+    >
       <router-link
         ref="tagRef"
         v-for="tag in tagsViewStore.visitedViews"
         :key="tag.fullPath"
         :class="'tags-item ' + (isActive(tag) ? 'active' : '')"
         :to="{ path: tag.path, query: tag.query }"
+        @click.middle="!isAffix(tag) ? closeSelectedTag(tag) : ''"
         @contextmenu.prevent="openContentMenu(tag, $event)"
       >
         {{ tag.title }}
@@ -20,6 +25,36 @@
       </router-link>
     </el-scrollbar>
     <!-- tag标签操作菜单 -->
+    <ul
+      v-show="contentMenuVisible"
+      class="contextmenu"
+      :style="{ left: left + 'px', top: top + 'px' }"
+    >
+      <li @click="refreshSelectedTag(selectedTag)">
+        <svg-icon icon-class="refresh" />
+        刷新
+      </li>
+      <li v-if="!isAffix(selectedTag)" @click="closeSelectedTag(selectedTag)">
+        <svg-icon icon-class="close" />
+        关闭
+      </li>
+      <li @click="closeOtherTags">
+        <svg-icon icon-class="close_other" />
+        关闭其它
+      </li>
+      <li v-if="!isFirstView()" @click="closeLeftTags">
+        <svg-icon icon-class="close_left" />
+        关闭左侧
+      </li>
+      <li v-if="!isLastView()" @click="closeRightTags">
+        <svg-icon icon-class="close_right" />
+        关闭右侧
+      </li>
+      <li>
+        <svg-icon icon-class="close_all" @click="closeAllTags(selectedTag)" />
+        关闭所有
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -31,9 +66,19 @@ const route = useRoute()
 import tagsViewStore from '@/store/modules/tagsView'
 import settingsStore from '@/store/modules/settings'
 import permissionStore from '@/store/modules/permission'
-import ContentMenuCom from './components/ContentMenuCom.vue'
-import ContextMenu from '@/utils/ContextMenu/index.js'
 const { proxy } = getCurrentInstance()
+
+const left = ref(0) //弹窗左侧距离--变量
+const top = ref(0) //弹窗上距离--变量
+const selectedTag = ref({
+  //右键选中的tag--变量
+  path: '',
+  fullPath: '',
+  name: '',
+  title: '',
+  affix: false,
+  keepAlive: false,
+})
 
 watch(
   //route当前路由改变时添加到storetagsView中
@@ -47,6 +92,28 @@ watch(
   }
 )
 
+const contentMenuVisible = ref(false) // 右键菜单是否显示--变量
+watch(contentMenuVisible, (value) => {
+  //右键菜单方法
+  if (value) {
+    document.body.addEventListener('click', closeContentMenu)
+  } else {
+    document.body.removeEventListener('click', closeContentMenu)
+  }
+})
+
+/**
+ * 关闭右键菜单--方法
+ */
+function closeContentMenu() {
+  contentMenuVisible.value = false
+}
+/**
+ * 滚动事件--方法
+ */
+function handleScroll() {
+  closeContentMenu()
+}
 /**
  * 判断是否是激活的--方法
  */
@@ -58,6 +125,29 @@ function isActive(tag) {
  */
 function isAffix(tag) {
   return tag?.affix
+}
+/**
+ * 判断是否是第一个view标签--方法
+ */
+function isFirstView() {
+  try {
+    return selectedTag.value.fullPath === tagsViewStore.visitedViews[1].fullPath
+  } catch (err) {
+    return false
+  }
+}
+/**
+ * 判断是否是最后一个view标签--方法
+ */
+function isLastView() {
+  try {
+    return (
+      selectedTag.value.fullPath ===
+      tagsViewStore.visitedViews[tagsViewStore.visitedViews.length - 1].fullPath
+    )
+  } catch (err) {
+    return false
+  }
 }
 /**
  * 到最后一个标签-方法
@@ -73,6 +163,16 @@ function toLastView(visitedViews, view) {
   }
 }
 /**
+ * 刷新-方法
+ */
+function refreshSelectedTag(view) {
+  tagsViewStore.delCachedView(view) //删除缓存的路由
+  const { fullPath } = view
+  nextTick(() => {
+    router.replace({ path: '/redirect' + fullPath })
+  })
+}
+/**
  * 关闭选中的标签--方法
  */
 function closeSelectedTag(view) {
@@ -82,7 +182,43 @@ function closeSelectedTag(view) {
     }
   })
 }
-
+/**
+ * 关闭其他标签--方法
+ */
+function closeOtherTags() {
+  router.push(selectedTag.value)
+  tagsViewStore.delOtherViews(selectedTag.value).then(() => {
+    moveToCurrentTag()
+  })
+}
+/**
+ * 关闭左侧标签--方法
+ */
+function closeLeftTags() {
+  tagsViewStore.delLeftViews(selectedTag.value).then((res) => {
+    if (!res.visitedViews.find((item) => item.path === route.path)) {
+      toLastView(res.visitedViews)
+    }
+  })
+}
+/**
+ * 关闭右侧标签--方法
+ */
+function closeRightTags() {
+  tagsViewStore.delRightViews(selectedTag.value).then((res) => {
+    if (!res.visitedViews.find((item) => item.path === route.path)) {
+      toLastView(res.visitedViews)
+    }
+  })
+}
+/**
+ * 关闭所有标签--方法
+ */
+function closeAllTags(view) {
+  tagsViewStore.delAllViews().then((res) => {
+    toLastView(res.visitedViews, view)
+  })
+}
 /**
  * 过滤出需要固定的标签--方法
  */
@@ -122,10 +258,9 @@ function initTags() {
   }
 }
 /**
- * 添加Tage--方法--->需要
+ * 添加Tage--方法
  */
 function addTags() {
-  console.log('route.meta', route)
   if (route.meta.title) {
     tagsViewStore.addView({
       name: route.name,
@@ -165,20 +300,29 @@ function moveToCurrentTag() {
  * 打开右键菜单--方法
  */
 function openContentMenu(tag, e) {
-  console.log('tag', tag)
+  const menuMinWidth = 105
 
-  e.preventDefault()
-  ContextMenu.show(
-    e,
-    ContentMenuCom,
-    {
-      // area: '200px', // 打开的vue的宽度
-    },
-    {
-      // 传入任意vue组件的props对象
-      selectedTag: tag,
-    }
-  )
+  const offsetLeft = proxy?.$el.getBoundingClientRect().left // container margin left
+  const offsetWidth = proxy?.$el.offsetWidth // container width
+  const maxLeft = offsetWidth - menuMinWidth // left boundary
+  const l = e.clientX - offsetLeft + 15 // 15: margin right
+
+  if (l > maxLeft) {
+    left.value = maxLeft
+  } else {
+    left.value = l
+  }
+
+  // 混合模式下，需要减去顶部菜单(fixed)的高度
+  if (settingsStore.layout === 'mix') {
+    top.value = e.clientY - 50
+  } else {
+    top.value = e.clientY
+  }
+
+  contentMenuVisible.value = true
+  console.log('contentMenuVisible', contentMenuVisible)
+  selectedTag.value = tag
 }
 
 onMounted(() => {
@@ -242,6 +386,24 @@ onMounted(() => {
         color: var(--el-color-primary);
         background-color: var(--el-fill-color-light);
       }
+    }
+  }
+}
+
+.contextmenu {
+  position: absolute;
+  z-index: 99;
+  font-size: 12px;
+  background: var(--el-bg-color-overlay);
+  border-radius: 4px;
+  box-shadow: var(--el-box-shadow-light);
+
+  li {
+    padding: 8px 16px;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--el-fill-color-light);
     }
   }
 }
