@@ -7,8 +7,8 @@ export const useDraggableDirective = {
     // 获取视口边界
     let viewportWidth = window.innerWidth
     let viewportHeight = window.innerHeight
-    const elementWidth = el.offsetWidth
-    const elementHeight = el.offsetHeight
+    let elementWidth = el.offsetWidth
+    let elementHeight = el.offsetHeight
     //如果有右和下位置改变x,y
     if (useDraggableOption?.position) {
       //初始位置非useDraggable有的属性
@@ -180,6 +180,7 @@ export const useDraggableDirective = {
     const resizeHandler = throttle(() => {
       viewportWidth = window.innerWidth
       viewportHeight = window.innerHeight
+
       changeX(x.value)
       changeY(y.value)
     }, 10)

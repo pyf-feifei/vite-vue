@@ -35,6 +35,15 @@
       <settings />
     </RightPanel> -->
     <div @contextmenu.prevent="showContextMenu">自定义右键菜单</div>
+    <zoom
+      v-useDraggableDirective="{
+        position: {
+          right: 10,
+          bottom: 80,
+        },
+        unMoveClass: [],
+      }"
+    ></zoom>
   </div>
 </template>
 
@@ -47,6 +56,7 @@ import MdEditorV3 from '@/components/MdEditorV3/index.vue'
 import RightPanel from '@/components/RightPanel/index.vue'
 import TestDialogs from './dialogs/TestDialogs.vue'
 import TestDialogs1 from './dialogs/TestDialogs1.vue'
+import zoom from './components/zoom.vue'
 const { proxy } = getCurrentInstance()
 let testMsg = ref('1111111')
 let openPopoverRef = ref()

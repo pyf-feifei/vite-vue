@@ -19,7 +19,12 @@ export function useResize(dragRef, option, emit) {
 
   const isResizing = ref(false)
   const initialPosition = ref({ clientX: 0, clientY: 0 })
-  const initialSize = ref({ clientWidth: 0, clientHeight: 0, offsetLeft: 0, offsetTop: 0 })
+  const initialSize = ref({
+    clientWidth: 0,
+    clientHeight: 0,
+    offsetLeft: 0,
+    offsetTop: 0,
+  })
 
   const cursorStyle = ref('default') //鼠标样式
 
@@ -35,13 +40,25 @@ export function useResize(dragRef, option, emit) {
       cursorStyle.value = 'default'
       return
     }
-    if (clientX > offsetLeft + clientWidth - edgeSize && clientY > offsetTop + clientHeight - edgeSize) {
+    if (
+      clientX > offsetLeft + clientWidth - edgeSize &&
+      clientY > offsetTop + clientHeight - edgeSize
+    ) {
       cursorStyle.value = 'se-resize' // 右下角
-    } else if (clientX < offsetLeft + edgeSize && clientY > offsetTop + clientHeight - edgeSize) {
+    } else if (
+      clientX < offsetLeft + edgeSize &&
+      clientY > offsetTop + clientHeight - edgeSize
+    ) {
       cursorStyle.value = 'sw-resize' // 左下角
-    } else if (clientX > offsetLeft + clientWidth - edgeSize && clientY < offsetTop + edgeSize) {
+    } else if (
+      clientX > offsetLeft + clientWidth - edgeSize &&
+      clientY < offsetTop + edgeSize
+    ) {
       cursorStyle.value = 'ne-resize' // 右上角
-    } else if (clientX < offsetLeft + edgeSize && clientY < offsetTop + edgeSize) {
+    } else if (
+      clientX < offsetLeft + edgeSize &&
+      clientY < offsetTop + edgeSize
+    ) {
       cursorStyle.value = 'nw-resize' // 左上角
     } else if (clientX > offsetLeft + clientWidth - edgeSize) {
       cursorStyle.value = 'w-resize' // 右拖动
@@ -75,7 +92,8 @@ export function useResize(dragRef, option, emit) {
   const onMousemove = (e) => {
     if (isResizing.value && cursorStyle.value !== 'default') {
       e.preventDefault() // 移动时禁用默认事件
-      const { offsetLeft, offsetTop, clientWidth, clientHeight } = initialSize.value
+      const { offsetLeft, offsetTop, clientWidth, clientHeight } =
+        initialSize.value
       let newWidth = clientWidth
       let newHeight = clientHeight
       let newLeft = offsetLeft
@@ -101,7 +119,10 @@ export function useResize(dragRef, option, emit) {
       }
 
       // 右侧鼠标拖拽位置
-      if (x > offsetLeft + clientWidth - edgeSize && x < offsetLeft + clientWidth + errorRange) {
+      if (
+        x > offsetLeft + clientWidth - edgeSize &&
+        x < offsetLeft + clientWidth + errorRange
+      ) {
         // 往左拖拽
         if (x > clientX) {
           newWidth = Math.max(clientWidth - (x - clientX) * scale, minWidth)
@@ -130,7 +151,10 @@ export function useResize(dragRef, option, emit) {
       }
 
       // 底部鼠标拖拽位置
-      if (y > offsetTop + clientHeight - edgeSize && y < offsetTop + clientHeight + errorRange) {
+      if (
+        y > offsetTop + clientHeight - edgeSize &&
+        y < offsetTop + clientHeight + errorRange
+      ) {
         // 往上拖拽
         if (y > clientY) {
           newHeight = Math.max(clientHeight - (y - clientY) * scale, minHeight)
@@ -142,13 +166,24 @@ export function useResize(dragRef, option, emit) {
       }
 
       if (dragRefIn.value) {
-        bodyStyle.value = { width: `${newWidth}px`, height: `${newHeight}px`, left: `${newLeft}px`, top: `${newTop}px` }
+        bodyStyle.value = {
+          width: `${newWidth}px`,
+          height: `${newHeight}px`,
+          left: `${newLeft}px`,
+          top: `${newTop}px`,
+        }
         // 或者设置 dragRefIn.value.body 的样式
         dragRefIn.value.style.width = `${newWidth}px`
         dragRefIn.value.style.height = `${newHeight}px`
         dragRefIn.value.style.left = `${newLeft}px`
         dragRefIn.value.style.top = `${newTop}px`
-        emit && emit('resize', { width: newWidth, height: newHeight, left: newLeft, top: newTop })
+        emit &&
+          emit('resize', {
+            width: newWidth,
+            height: newHeight,
+            left: newLeft,
+            top: newTop,
+          })
       }
     } else {
       updateCursorStyle(e)
@@ -161,7 +196,9 @@ export function useResize(dragRef, option, emit) {
   }
   const onMountedFun = () => {
     console.log('document', document)
-    dragRefIn.value && onMousedown && dragRefIn.value.removeEventListener('mousedown', onMousedown)
+    dragRefIn.value &&
+      onMousedown &&
+      dragRefIn.value.removeEventListener('mousedown', onMousedown)
     document.addEventListener('mousemove', onMousemove)
     document.addEventListener('mouseup', onMouseup)
     dragRefIn.value.addEventListener('mousedown', onMousedown)
@@ -171,7 +208,9 @@ export function useResize(dragRef, option, emit) {
     console.log('关闭1')
     document.removeEventListener('mousemove', onMousemove)
     document.removeEventListener('mouseup', onMouseup)
-    dragRefIn.value && onMousedown && dragRefIn.value.removeEventListener('mousedown', onMousedown)
+    dragRefIn.value &&
+      onMousedown &&
+      dragRefIn.value.removeEventListener('mousedown', onMousedown)
   }
   onUnmounted(onUnmountedFun)
 
