@@ -30,20 +30,12 @@
       >Popover测试</el-button
     >
     <!-- <editor v-model="value" style="height: 600px" /> -->
-    <MdEditorV3 class="mb4" v-model="mdEditorV3Value" style="height: 600px" />
+    <!-- <MdEditorV3 class="mb4" v-model="mdEditorV3Value" style="height: 600px" /> -->
     <!-- <RightPanel v-if="showSettings">
       <settings />
     </RightPanel> -->
     <div @contextmenu.prevent="showContextMenu">自定义右键菜单</div>
-    <zoom
-      v-useDraggableDirective="{
-        position: {
-          right: 10,
-          bottom: 80,
-        },
-        unMoveClass: [],
-      }"
-    ></zoom>
+    <zoom></zoom>
   </div>
 </template>
 
