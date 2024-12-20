@@ -1,7 +1,7 @@
-// usePanZoom.js 在某个div下自由拖动缩放
+// useDragAndRoom.js 在某个div下自由拖动缩放
 import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
 
-export function usePanZoom(containerRef, options = {}) {
+export function useDragAndRoom(containerRef, options = {}) {
   const {
     minScale = 0.1,
     maxScale = 5,

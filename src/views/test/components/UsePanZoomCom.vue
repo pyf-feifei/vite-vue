@@ -14,22 +14,25 @@
 
 <script setup>
 import { ref } from 'vue'
-import { usePanZoom } from '@/hooks/usePanZoom.js'
+import { useDragAndRoom } from '@/hooks/useDragAndRoom.js'
 
 const containerRef = ref(null)
 
-const { transformStyle, startDrag, handleWheel } = usePanZoom(containerRef, {
-  minScale: 0.1,
-  maxScale: 5,
-  zoomSpeed: 0.1,
-  initialScale: 1,
-  onZoomChange: (scale) => {
-    console.log('Zoom changed:', scale)
-  },
-  onPanChange: ({ x, y }) => {
-    console.log('Pan position:', x, y)
-  },
-})
+const { transformStyle, startDrag, handleWheel } = useDragAndRoom(
+  containerRef,
+  {
+    minScale: 0.1,
+    maxScale: 5,
+    zoomSpeed: 0.1,
+    initialScale: 1,
+    onZoomChange: (scale) => {
+      console.log('Zoom changed:', scale)
+    },
+    onPanChange: ({ x, y }) => {
+      console.log('Pan position:', x, y)
+    },
+  }
+)
 </script>
 
 <style scoped>
