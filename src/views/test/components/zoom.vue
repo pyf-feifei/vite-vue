@@ -3,8 +3,8 @@
     <canvas
       ref="canvasRef"
       :style="{
-        cursor: isDragging ? 'move' : 'default',
-        transform: `translate(${translateX}px, ${translateY}px) scale(${scale})`,
+        cursor: panState.isDragging ? 'move' : 'default',
+        transform: `translate(${panState.translateX}px, ${panState.translateY}px) scale(${zoomState.scale})`,
       }"
       @mousedown="startDrag"
       @wheel="handleWheel"
@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { ref, reactive, onMounted, watch } from 'vue'
 
 const props = defineProps({
   imageUrl: {
@@ -29,21 +29,27 @@ const ctx = ref(null)
 const imageObj = ref(null)
 
 // Pan state
-const translateX = ref(0)
-const translateY = ref(0)
-const prevTranslateX = ref(0)
-const prevTranslateY = ref(0)
-const isDragging = ref(false)
+const panState = reactive({
+  translateX: 0,
+  translateY: 0,
+  prevTranslateX: 0,
+  prevTranslateY: 0,
+  isDragging: false,
+})
 
 // Zoom state
-const scale = ref(1)
-const ZOOM_SPEED = 0.1
-const MIN_SCALE = 0.1
-const MAX_SCALE = 5
+const zoomState = reactive({
+  scale: 1,
+  ZOOM_SPEED: 0.1,
+  MIN_SCALE: 0.1,
+  MAX_SCALE: 5,
+})
 
 // Image state
-const imageWidth = ref(0)
-const imageHeight = ref(0)
+const imageState = reactive({
+  width: 0,
+  height: 0,
+})
 
 onMounted(() => {
   loadImage()
@@ -64,8 +70,8 @@ function loadImage() {
 
   img.onload = () => {
     imageObj.value = img
-    imageWidth.value = img.width
-    imageHeight.value = img.height
+    imageState.width = img.width
+    imageState.height = img.height
 
     initCanvas()
   }
@@ -86,7 +92,7 @@ function initCanvas() {
 
   // 计算图片适应容器的缩放比例
   const containerRatio = container.clientWidth / container.clientHeight
-  const imageRatio = imageWidth.value / imageHeight.value
+  const imageRatio = imageState.width / imageState.height
 
   let finalWidth, finalHeight
 
@@ -115,10 +121,10 @@ function centerCanvas() {
   const canvas = canvasRef.value
   const container = containerRef.value
 
-  translateX.value = (container.clientWidth - canvas.width) / 2
-  translateY.value = (container.clientHeight - canvas.height) / 2
-  prevTranslateX.value = translateX.value
-  prevTranslateY.value = translateY.value
+  panState.translateX = (container.clientWidth - canvas.width) / 2
+  panState.translateY = (container.clientHeight - canvas.height) / 2
+  panState.prevTranslateX = panState.translateX
+  panState.prevTranslateY = panState.translateY
 }
 
 function drawImage() {
@@ -138,7 +144,7 @@ function drawImage() {
 function startDrag(event) {
   if (event.button !== 0) return // 只响应左键
 
-  isDragging.value = true
+  panState.isDragging = true
   const startX = event.clientX
   const startY = event.clientY
 
@@ -146,14 +152,14 @@ function startDrag(event) {
     const deltaX = event.clientX - startX
     const deltaY = event.clientY - startY
 
-    translateX.value = prevTranslateX.value + deltaX
-    translateY.value = prevTranslateY.value + deltaY
+    panState.translateX = panState.prevTranslateX + deltaX
+    panState.translateY = panState.prevTranslateY + deltaY
   }
 
   function onMouseUp() {
-    isDragging.value = false
-    prevTranslateX.value = translateX.value
-    prevTranslateY.value = translateY.value
+    panState.isDragging = false
+    panState.prevTranslateX = panState.translateX
+    panState.prevTranslateY = panState.translateY
 
     window.removeEventListener('mousemove', onMouseMove)
     window.removeEventListener('mouseup', onMouseUp)
@@ -170,24 +176,24 @@ function handleWheel(event) {
   const { x: mouseX, y: mouseY } = getRelativeMousePos(event)
 
   // 确定缩放方向
-  const zoomFactor = event.deltaY > 0 ? 1 - ZOOM_SPEED : 1 + ZOOM_SPEED
+  const zoomFactor =
+    event.deltaY > 0 ? 1 - zoomState.ZOOM_SPEED : 1 + zoomState.ZOOM_SPEED
 
   // 计算新的缩放值
-  const newScale = scale.value * zoomFactor
+  const newScale = zoomState.scale * zoomFactor
 
   // 检查缩放范围
-  if (newScale < MIN_SCALE || newScale > MAX_SCALE) return
+  if (newScale < zoomState.MIN_SCALE || newScale > zoomState.MAX_SCALE) return
 
   // 更新缩放值
-  scale.value = newScale
+  zoomState.scale = newScale
 
   // 计算新的位置，使缩放以鼠标位置为中心
-  const scaleRatio = zoomFactor
-  translateX.value = (translateX.value - mouseX) * scaleRatio + mouseX
-  translateY.value = (translateY.value - mouseY) * scaleRatio + mouseY
+  panState.translateX = (panState.translateX - mouseX) * zoomFactor + mouseX
+  panState.translateY = (panState.translateY - mouseY) * zoomFactor + mouseY
 
-  prevTranslateX.value = translateX.value
-  prevTranslateY.value = translateY.value
+  panState.prevTranslateX = panState.translateX
+  panState.prevTranslateY = panState.translateY
 }
 
 function getRelativeMousePos(event) {

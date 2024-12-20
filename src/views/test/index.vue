@@ -35,7 +35,8 @@
       <settings />
     </RightPanel> -->
     <div @contextmenu.prevent="showContextMenu">自定义右键菜单</div>
-    <zoom></zoom>
+    <!-- <zoom></zoom> -->
+    <UsePanZoomCom></UsePanZoomCom>
   </div>
 </template>
 
@@ -49,6 +50,7 @@ import RightPanel from '@/components/RightPanel/index.vue'
 import TestDialogs from './dialogs/TestDialogs.vue'
 import TestDialogs1 from './dialogs/TestDialogs1.vue'
 import zoom from './components/zoom.vue'
+import UsePanZoomCom from './components/UsePanZoomCom.vue'
 const { proxy } = getCurrentInstance()
 let testMsg = ref('1111111')
 let openPopoverRef = ref()
