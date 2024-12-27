@@ -51,6 +51,7 @@ import TestDialogs from './dialogs/TestDialogs.vue'
 import TestDialogs1 from './dialogs/TestDialogs1.vue'
 import zoom from './components/zoom.vue'
 import UsePanZoomCom from './components/UsePanZoomCom.vue'
+import ContextMenu from '@/utils/ContextMenu/index.js'
 const { proxy } = getCurrentInstance()
 let testMsg = ref('1111111')
 let openPopoverRef = ref()
@@ -63,36 +64,32 @@ const openDialog = () => {
     console.log('res', res)
   })
 }
-const openPopover = () => {
-  proxy.$popover
-    .show(TestDialogs, {
-      elPopoverOptions: {
-        slots: {
-          reference: openPopoverRef.value,
-        },
-      },
-    })
-    .then((res) => {
-      console.log('res', res)
-      elPopoverOptions.slots.reference
-    })
+const openPopover = ($event) => {
+  ContextMenu.show(
+    $event,
+    TestDialogs,
+    {
+      area: '200px', // 打开的vue的宽度
+    },
+    {
+      // 传入任意vue组件的props对象
+    }
+  )
 }
 const handleHoverDirective = (hover, events) => {
   console.log('hover', hover)
-  if (hover) {
-    proxy.$popover
-      .show(TestDialogs, {
-        elPopoverOptions: {
-          slots: {
-            reference: openPopoverRef.value,
-          },
-        },
-      })
-      .then((res) => {
-        console.log('res', res)
-        elPopoverOptions.slots.reference
-      })
-  }
+  // if (hover) {
+  //   ContextMenu.show(
+  //     events,
+  //     TestDialogs,
+  //     {
+  //       area: '200px', // 打开的vue的宽度
+  //     },
+  //     {
+  //       // 传入任意vue组件的props对象
+  //     }
+  //   )
+  // }
 }
 const doLogIn = () => {
   userStore.login({ loginName: 'admin', password: 'mima334' }).then(() => {})
