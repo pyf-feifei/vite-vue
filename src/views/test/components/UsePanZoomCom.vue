@@ -5,8 +5,12 @@
     @mousedown="startDrag"
     @wheel="handleWheel"
   >
-    <div class="content" :style="transformStyle">
-      <!-- 你的内容 -->
+    <div
+      class="content"
+      :style="transformStyle"
+      @mouseenter="onContentEnter"
+      @mouseleave="onContentLeave"
+    >
       <slot></slot>
     </div>
   </div>
@@ -18,21 +22,24 @@ import { useDragAndRoom } from '@/hooks/useDragAndRoom.js'
 
 const containerRef = ref(null)
 
-const { transformStyle, startDrag, handleWheel } = useDragAndRoom(
-  containerRef,
-  {
-    minScale: 0.1,
-    maxScale: 5,
-    zoomSpeed: 0.1,
-    initialScale: 1,
-    onZoomChange: (scale) => {
-      console.log('Zoom changed:', scale)
-    },
-    onPanChange: ({ x, y }) => {
-      console.log('Pan position:', x, y)
-    },
-  }
-)
+const {
+  transformStyle,
+  startDrag,
+  handleWheel,
+  onContentEnter,
+  onContentLeave,
+} = useDragAndRoom(containerRef, {
+  minScale: 0.1,
+  maxScale: 5,
+  zoomSpeed: 0.1,
+  initialScale: 1,
+  onZoomChange: (scale) => {
+    console.log('Zoom changed:', scale)
+  },
+  onPanChange: ({ x, y }) => {
+    console.log('Pan position:', x, y)
+  },
+})
 </script>
 
 <style scoped>

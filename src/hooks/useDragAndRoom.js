@@ -9,8 +9,6 @@ export function useDragAndRoom(containerRef, options = {}) {
     initialScale = 1,
     onZoomChange,
     onPanChange,
-    enableInertia = true,
-    inertiaDeceleration = 0.9,
   } = options
 
   // Pan state
@@ -20,8 +18,6 @@ export function useDragAndRoom(containerRef, options = {}) {
     prevTranslateX: 0,
     prevTranslateY: 0,
     isDragging: false,
-    velocity: { x: 0, y: 0 },
-    lastTime: 0,
     lastX: 0,
     lastY: 0,
   })
@@ -43,34 +39,13 @@ export function useDragAndRoom(containerRef, options = {}) {
   }))
 
   let animationFrameId = null
-  let lastDragEvent = null
-  let isInertiaActive = false
 
   // 使用 requestAnimationFrame 优化拖动更新
   function updateDragPosition(event) {
-    if (!lastDragEvent) {
-      lastDragEvent = event
-      return
-    }
-
-    const currentTime = performance.now()
-    const deltaTime = currentTime - panState.lastTime
-    const deltaX = event.clientX - lastDragEvent.clientX
-    const deltaY = event.clientY - lastDragEvent.clientY
-
-    // 计算瞬时速度
-    if (deltaTime > 0) {
-      panState.velocity.x = deltaX / deltaTime
-      panState.velocity.y = deltaY / deltaTime
-    }
-
     panState.translateX =
       panState.prevTranslateX + (event.clientX - panState.lastX)
     panState.translateY =
       panState.prevTranslateY + (event.clientY - panState.lastY)
-
-    panState.lastTime = currentTime
-    lastDragEvent = event
 
     onPanChange?.({
       x: panState.translateX,
@@ -78,43 +53,20 @@ export function useDragAndRoom(containerRef, options = {}) {
     })
   }
 
-  // 惯性滚动动画
-  function inertiaAnimation() {
-    if (
-      !isInertiaActive ||
-      (Math.abs(panState.velocity.x) < 0.01 &&
-        Math.abs(panState.velocity.y) < 0.01)
-    ) {
-      isInertiaActive = false
-      return
-    }
-
-    panState.translateX += panState.velocity.x * 16 // 假设 16ms 每帧
-    panState.translateY += panState.velocity.y * 16
-    panState.prevTranslateX = panState.translateX
-    panState.prevTranslateY = panState.translateY
-
-    // 减速
-    panState.velocity.x *= inertiaDeceleration
-    panState.velocity.y *= inertiaDeceleration
-
-    animationFrameId = requestAnimationFrame(inertiaAnimation)
-  }
+  // Add new state to track if mouse is over content
+  const isOverContent = ref(false)
 
   function startDrag(event) {
-    if (event.button !== 0) return // 只响应左键
+    // Only start drag if mouse is over content
+    if (event.button !== 0 || !isOverContent.value) return
 
-    // 停止任何正在进行的惯性动画
     if (animationFrameId) {
       cancelAnimationFrame(animationFrameId)
-      isInertiaActive = false
     }
 
     panState.isDragging = true
     panState.lastX = event.clientX
     panState.lastY = event.clientY
-    panState.lastTime = performance.now()
-    lastDragEvent = null
 
     function onMouseMove(event) {
       // 使用 requestAnimationFrame 进行位置更新
@@ -131,12 +83,6 @@ export function useDragAndRoom(containerRef, options = {}) {
 
       window.removeEventListener('mousemove', onMouseMove)
       window.removeEventListener('mouseup', onMouseUp)
-
-      // 启用惯性滚动
-      if (enableInertia) {
-        isInertiaActive = true
-        inertiaAnimation()
-      }
     }
 
     window.addEventListener('mousemove', onMouseMove, { passive: true })
@@ -145,39 +91,53 @@ export function useDragAndRoom(containerRef, options = {}) {
 
   // 优化的缩放动画
   let zoomAnimationFrame = null
-  function animateZoom(targetScale, mouseX, mouseY) {
+  function animateZoom(targetScale, contentX, contentY) {
     const currentScale = zoomState.scale
     const diff = targetScale - currentScale
-    const factor = 0.2 // 动画平滑度因子
+    const factor = 0.2
 
     if (Math.abs(diff) < 0.001) {
       zoomState.scale = targetScale
       return
     }
 
-    zoomState.scale += diff * factor
+    const newScale = currentScale + diff * factor
+    zoomState.scale = newScale
 
-    // 计算新的位置，使缩放以鼠标位置为中心
-    const scaleRatio = zoomState.scale / currentScale
-    panState.translateX = (panState.translateX - mouseX) * scaleRatio + mouseX
-    panState.translateY = (panState.translateY - mouseY) * scaleRatio + mouseY
+    // 更新位置，保持鼠标指向的内容点不变
+    panState.translateX = mouseX - contentX * newScale
+    panState.translateY = mouseY - contentY * newScale
 
     panState.prevTranslateX = panState.translateX
     panState.prevTranslateY = panState.translateY
 
+    onPanChange?.({
+      x: panState.translateX,
+      y: panState.translateY,
+    })
+
     zoomAnimationFrame = requestAnimationFrame(() =>
-      animateZoom(targetScale, mouseX, mouseY)
+      animateZoom(targetScale, contentX, contentY)
     )
   }
 
   function handleWheel(event) {
+    if (!isOverContent.value) return
     event.preventDefault()
 
     if (zoomAnimationFrame) {
       cancelAnimationFrame(zoomAnimationFrame)
     }
 
-    const { x: mouseX, y: mouseY } = getRelativeMousePos(event)
+    // 获取鼠标相对于容器的位置
+    const containerRect = containerRef.value.getBoundingClientRect()
+    const mouseX = event.clientX - containerRect.left
+    const mouseY = event.clientY - containerRect.top
+
+    // 计算鼠标相对于已变换内容的位置
+    const contentX = (mouseX - panState.translateX) / zoomState.scale
+    const contentY = (mouseY - panState.translateY) / zoomState.scale
+
     const zoomFactor =
       event.deltaY > 0 ? 1 - zoomState.ZOOM_SPEED : 1 + zoomState.ZOOM_SPEED
     const targetScale = clamp(
@@ -186,8 +146,39 @@ export function useDragAndRoom(containerRef, options = {}) {
       zoomState.MAX_SCALE
     )
 
+    // 修改缩放动画函数
+    function animateZoom(targetScale, contentX, contentY) {
+      const currentScale = zoomState.scale
+      const diff = targetScale - currentScale
+      const factor = 0.2
+
+      if (Math.abs(diff) < 0.001) {
+        zoomState.scale = targetScale
+        return
+      }
+
+      const newScale = currentScale + diff * factor
+      zoomState.scale = newScale
+
+      // 更新位置，保持鼠标指向的内容点不变
+      panState.translateX = mouseX - contentX * newScale
+      panState.translateY = mouseY - contentY * newScale
+
+      panState.prevTranslateX = panState.translateX
+      panState.prevTranslateY = panState.translateY
+
+      onPanChange?.({
+        x: panState.translateX,
+        y: panState.translateY,
+      })
+
+      zoomAnimationFrame = requestAnimationFrame(() =>
+        animateZoom(targetScale, contentX, contentY)
+      )
+    }
+
     // 开始缩放动画
-    animateZoom(targetScale, mouseX, mouseY)
+    animateZoom(targetScale, contentX, contentY)
     onZoomChange?.(targetScale)
   }
 
@@ -217,7 +208,6 @@ export function useDragAndRoom(containerRef, options = {}) {
     panState.translateY = 0
     panState.prevTranslateX = 0
     panState.prevTranslateY = 0
-    panState.velocity = { x: 0, y: 0 }
   }
 
   // 清理函数
@@ -230,6 +220,15 @@ export function useDragAndRoom(containerRef, options = {}) {
     }
   })
 
+  // Add new methods to track mouse position
+  function onContentEnter() {
+    isOverContent.value = true
+  }
+
+  function onContentLeave() {
+    isOverContent.value = false
+  }
+
   return {
     panState,
     zoomState,
@@ -237,5 +236,7 @@ export function useDragAndRoom(containerRef, options = {}) {
     startDrag,
     handleWheel,
     reset,
+    onContentEnter,
+    onContentLeave,
   }
 }
