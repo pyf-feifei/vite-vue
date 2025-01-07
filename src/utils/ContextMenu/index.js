@@ -1,6 +1,5 @@
-//鼠标位置弹窗，自定义右键菜单
 import { createApp, h } from 'vue'
-import init from '@/main/init.js'
+import init from '@/core/js/init'
 
 class ContextMenu {
   static instance = null
@@ -9,6 +8,7 @@ class ContextMenu {
     this.app = null
     this.componentInstance = null
     this.container = null
+    this.resolvePromise = null // 用于保存 resolve 函数
   }
 
   static getInstance() {
@@ -21,8 +21,11 @@ class ContextMenu {
   show(event, component, options = {}, props = {}) {
     const { area = 'auto' } = options
     const position = { x: event.clientX, y: event.clientY }
+    console.log('position', position)
 
     if (this.container) {
+      console.log('进入这')
+
       this.hide()
     }
 
@@ -35,12 +38,24 @@ class ContextMenu {
 
     document.body.appendChild(this.container)
 
-    this.app = createApp({
-      render: () => h(component, props),
-    })
-    init(this.app)
+    // 创建一个 Promise 并保存 resolve 函数
+    return new Promise((resolve) => {
+      this.resolvePromise = resolve
 
-    this.componentInstance = this.app.mount(this.container)
+      // 将 resolve 函数通过 props 传递给 component
+      const enhancedProps = {
+        ...props,
+        onResolve: this.resolvePromise, // 将 resolve 函数传递给 component
+      }
+
+      this.app = createApp({
+        render: () => h(component, enhancedProps),
+      })
+      init(this.app)
+      // console.log('this.container', this.container)
+
+      this.componentInstance = this.app.mount(this.container)
+    })
   }
 
   hide() {
@@ -50,6 +65,7 @@ class ContextMenu {
       this.app.unmount()
       this.app = null
       this.componentInstance = null
+      this.resolvePromise = null // 清除 resolve 函数
     }
   }
 }
