@@ -1,5 +1,6 @@
 import { createApp, h } from 'vue'
-import init from '@/core/js/init'
+import init from '@/main/init.js'
+
 
 class ContextMenu {
   static instance = null
